@@ -86,21 +86,7 @@ inference_resnet50_task = KubernetesPodOperator(
     dag=dag,
 )
 
-# # Execute dag_alexnet and then, trigger  dag_resnet50
-# trigger_b = TriggerDagRunOperator(
-#     task_id='trigger_dag_resnet50',
-#     trigger_dag_id='dag_resnet50',
-#     dag=dag_alexnet,
-# )
-
 end = DummyOperator(task_id='end', dag=dag)
 
 inference_alexnet_task.set_upstream(start)
 inference_alexnet_task.set_downstream(end)
-
-# inference_resnet50_task.set_upstream(start)
-# inference_resnet50_task.set_downstream(end)
-
-# deploy_alexnet_task >> trigger_b
-
-# deploy_container_task.set_upstream(start)
