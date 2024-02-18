@@ -22,7 +22,7 @@ spec:
         - name: ENDPOINT
           value: "minio-svc.minio-dev:9000"
         - name: ACCESS_KEY
-          value: "rebellion"
+          value: "dbha0719"
         - name: SECRET_KEY
           value: "password"
         - name: IMAGE_BUCKET

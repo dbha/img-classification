@@ -128,21 +128,21 @@ $ ls -lrt k8s-infer
 - Continuous CLI deployment required due to source changes(Object Storage)
 - Container Image creation required for K8s deployment
 
-# Check pipeline
-$ https://github.com/dbha/technical-interview-cloud-engineer-dbha-private/blob/main/01_Jenkinsfile_Create_Image_k8s_infer_cli
+# Sample pipeline
+$ https://github.com/dbha/img-classification/blob/main/pipeline/01_Jenkinsfile_Create_Image_k8s_infer_cli
 
 ```
 ## CASE TEST (For Task1)
 ### k8s-infer Operation by CASE1
 
 ```bash
-# 테스트를 위해 tmp 영역으로 파일 Copy
+# Copy file to tmp area for testing
 mkdir -p /tmp/local/existing/imagenet-classes/
 mkdir -p /tmp/local/existing/images/
 
-cp ~/Workspaces/rebellions/imagenet-classes/imagenet_classes.txt  /tmp/local/existing/imagenet-classes/
-cp ~//Workspaces/rebellions/download-s3-images/ILSVRC2012_val_00000099.JPEG  /tmp/local/existing/images/
-cp ~//Workspaces/rebellions/download-s3-images/ILSVRC2012_val_00000100.JPEG  /tmp/local/existing/images/
+cp ~/Workspaces/git/img-classification/k8s_infer/imagenet_classes.txt  /tmp/local/existing/imagenet-classes/
+cp ~//Workspaces/git/images/ILSVRC2012_val_00000099.JPEG  /tmp/local/existing/images/
+cp ~//Workspaces/git/images/ILSVRC2012_val_00000100.JPEG  /tmp/local/existing/images/
 ```
 ```bash
 # CASE1은 Local 환경에서 사전에 저장된 image 위치를 지정하여 Inference 하는 방식입니다.
@@ -393,7 +393,7 @@ please Input endpoint and access_key and secret_key and images_bucket and images
 
 $ login minio console and check buckets
 
-$ ./k8s-infer --models resnet50 --type S3 --endpoint localhost:9000 --access_key rebellion --secret_key password --images_bucket images --classes_bucket imagenet-classes 
+$ ./k8s-infer --models resnet50 --type S3 --endpoint localhost:9000 --access_key ${ACCESS_KEY} --secret_key password --images_bucket images --classes_bucket imagenet-classes 
 
 valid model : resnet50
 type:  S3
@@ -548,7 +548,7 @@ input_tensor:
 class id: 65: 'sea snake',: 56.147974729537964%
 ```
 ```bash
-$ ./k8s-infer --models resnet50,resnet18 --type S3 --endpoint localhost:9000 --access_key rebellion --secret_key password --images_bucket images --classes_bucket imagenet-classes 
+$ ./k8s-infer --models resnet50,resnet18 --type S3 --endpoint localhost:9000 --access_key ${ACCESS_KEY} --secret_key password --images_bucket images --classes_bucket imagenet-classes 
 valid model : resnet50
 valid model : resnet18
 type:  S3
@@ -928,7 +928,7 @@ spec:
         - name: ENDPOINT
           value: "minio-svc.minio-dev:9000"
         - name: ACCESS_KEY
-          value: "rebellion"
+          value: "${ACCESS_KEY}"
         - name: SECRET_KEY
           value: "password"
         - name: IMAGE_BUCKET
@@ -1147,7 +1147,7 @@ spec:
         - name: ENDPOINT
           value: "minio-svc.minio-dev:9000"
         - name: ACCESS_KEY
-          value: "rebellion"
+          value: "${ACCESS_KEY}"
         - name: SECRET_KEY
           value: "password"
         - name: IMAGE_BUCKET
@@ -1520,7 +1520,7 @@ spec:
         - name: ENDPOINT
           value: "minio-svc.minio-dev:9000"
         - name: ACCESS_KEY
-          value: "rebellion"
+          value: "${ACCESS_KEY}"
         - name: SECRET_KEY
           value: "password"
         - name: IMAGE_BUCKET

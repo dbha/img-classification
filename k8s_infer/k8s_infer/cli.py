@@ -93,10 +93,8 @@ def download_image_from_minio(endpoint, access_key, secret_key, bucket, bucket_t
             # Laptop 으로 이미지를 다운로드 하는 경우
             if bucket_type == 'images':
                 local_folder = "/tmp/local/s3/download-s3-images"
-                # local_folder = "/Users/dbha/Workspaces/rebellions/download-s3-images"
             else:
-                local_folder = "/tmp/local/s3/imagenet-classes"
-                # local_folder = "/Users/dbha/Workspaces/rebellions/imagenet-classes"             
+                local_folder = "/tmp/local/s3/imagenet-classes"          
 
         os.makedirs(local_folder, exist_ok=True)
         delete_files_in_directory(local_folder)
