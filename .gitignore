@@ -7,3 +7,4 @@ k8s_infer/k8s_infer.egg-info/*
 k8s/Dockerfile
 k8s/Dockerfile-create-k8s-infer-base
 pipeline/01_Jenkinsfile_Create_Image_k8s_infer_cli
+.gitignore
