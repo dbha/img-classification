@@ -70,7 +70,6 @@ Type "help", "copyright", "credits" or "license" for more information.
 
 
 ### 2. Check setup.py through the setuptools module to package the python project.
-```bash
 cat k8s_infer/setup.py
 
 from setuptools import setup, find_packages
@@ -143,7 +142,6 @@ $ ls -lrt /Users/dbha/.local/share/virtualenvs/img-classification-ePWnLRIA/bin/k
 
 # Sample pipeline
 $ https://github.com/dbha/img-classification/blob/main/pipeline/01_Jenkinsfile_Create_Image_k8s_infer_cli
-
 ```
 ## CASE TEST (For Task1)
 ### k8s-infer Operation by CASE1
