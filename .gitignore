@@ -3,4 +3,4 @@
 .DS_Store
 README_K.md
 k8s_infer/build/*
-k8s_infer/k8s_infer.egg-info
+k8s_infer/k8s_infer.egg-info/*
