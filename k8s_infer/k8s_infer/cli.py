@@ -34,11 +34,9 @@ def check_pretrained_model(input_model_name):
     # Check whether model name is included
     for model_name in all_model_names:
         if model_name.lower() == input_model_name.lower():
-        #   print(f"{input_model_name} is right model")
             check_result = True
             break
         else:
-        #   print(f"{input_model_name} is wrong model")
           check_result = False
         
     return check_result
@@ -51,7 +49,6 @@ def check_file_type(input_image_name):
     root, extension = os.path.splitext(file_name)
 
     if extension in ['.PNG','.JPEG','.png','.jpeg']:
-        # print('this image is correct type')
         return True
     else:
         return False
@@ -77,9 +74,6 @@ def download_image_from_minio(endpoint, access_key, secret_key, bucket, bucket_t
        # Connect to MinIO server
         minio_client = Minio(endpoint, access_key, secret_key, secure=False)
 
-        # Download images from MinIO bucket (one item)
-        # minio_client.fget_object(bucket, object_name, local_folder)
-
         # Get a list of all objects within the MinIO bucket
         objects = minio_client.list_objects(bucket, recursive=True)
 
@@ -87,10 +81,8 @@ def download_image_from_minio(endpoint, access_key, secret_key, bucket, bucket_t
         # When downloading images into Container
         if workload.strip() == "C":
             if bucket_type == 'images':
-                # local_folder = "/config/download-s3-images"
                 local_folder = "/tmp/container/s3/download-s3-images"
             else:
-                # local_folder = "/config/imagenet-classes"
                 local_folder = "/tmp/container/s3/imagenet-classes"  
         else:
             # When downloading images using Laptop
@@ -186,7 +178,7 @@ def inference_s3_image(input_model_name, input_image_name, endpoint, access_key,
         # prediction = model(batch).squeeze(0).softmax(0)
         prediction = model(input_batch).squeeze(0).softmax(0)
 
-       # Get a list of classes from the ImageNet dataset
+        # Get a list of classes from the ImageNet dataset
         imagenet_classes_path = file_path
         with open(imagenet_classes_path) as f:
             classes = [line.strip() for line in f.readlines()]
@@ -195,14 +187,8 @@ def inference_s3_image(input_model_name, input_image_name, endpoint, access_key,
         class_id = prediction.argmax().item()
         score = prediction[class_id].item()
 
-        # print("class_id : ", class_id)
-
         # Output class label
         predicted_class_label = classes[class_id]
-        # print(f"predicted_class_label: {predicted_class_label}")
-    
-        # print("weight class_id:", class_id)
-        # category_name = weights.meta["categories"][class_id]
         print(f"class id: {predicted_class_label}: {100 * score}%\n")
 
 
@@ -222,9 +208,7 @@ def inference_local_image(input_model_name, input_image_name, yaml, local_dict, 
 
     model.eval()  # Put the model into inference mode
 
-    # preprocess = weights.transforms()
-
-   # Create a transformation pipeline in which several transformation functions are applied in order to preprocess the image
+    # Create a transformation pipeline in which several transformation functions are applied in order to preprocess the image
     preprocess = transforms.Compose([
         transforms.Resize(256),  # Adjust image size
         transforms.CenterCrop(224),
@@ -254,13 +238,7 @@ def inference_local_image(input_model_name, input_image_name, yaml, local_dict, 
             class_id = prediction.argmax().item()  # Select the class with the highest probability
             score = prediction[class_id].item()
 
-            # print("class_id : ", class_id)
-
             predicted_class_label = classes[class_id]
-            # print(f"predicted_class_label: {predicted_class_label}")
-        
-            # print("weight class_id:", class_id)
-            # category_name = weights.meta["categories"][class_id]
             print(f"class id: {predicted_class_label}: {100 * score}%")
 
         except Exception as e:    
@@ -352,8 +330,6 @@ def main():
 
     # If the value is None, initialized to blank
     process_args(args)
-
-    # input_model_name = args.models
     
     input_image_name = args.image
     type             = args.type
@@ -411,10 +387,8 @@ def main():
 
                 check_image=check_file_type(input_image_name)
                 if check_image:
-                    # print("valid image_type : ", input_image_name")
                     print(f"valid image_type : {input_image_name}\n")
                 else:
-                    # print("invaild image_type : ", input_image_name)
                     print(f"\ninvaild image_type : {input_image_name}\n")
                     sys.exit(0)
                 
@@ -428,8 +402,6 @@ def main():
             elif type.strip() == "S3":
 
                 if yaml.strip() == "":
-                    # print("Call inference_s3_image\n")
-
                     if endpoint is None or endpoint.strip() == "":
                         print("\nplease Input endpoint and access_key and secret_key and images_bucket and images_bucket")
                         sys.exit(0)
@@ -445,7 +417,6 @@ def main():
                     if classes_bucket is None or classes_bucket.strip() == "":
                         print("\nplease Input endpoint and access_key and secret_key and images_bucket and images_bucket")
                         sys.exit(0)
-
 
                     for model_str in model_list:
                         values = model_str.split(',')
@@ -494,4 +465,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-    # inference_image()
