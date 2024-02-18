@@ -93,7 +93,7 @@ spec:
                         cat /tmp/inference_${MODELS}_*.log
 
                         echo "Connect Object Storage"
-                        mc config host add minio-dev http://minio-svc.minio-dev.svc.cluster.local:9000 dbha0719 bGatyb2DFTb942EzxJJ0fbhE5CslwBt5joFzFi4Y --api S3v4
+                        mc config host add minio-dev http://minio-svc.minio-dev.svc.cluster.local:9000 ${ACCESS_KEY} ${SECRET_KEY} --api S3v4
                         mc ls minio-dev
                         
                         echo -e "\nUpload Job Log into inference-job-log-from-pipeline Bucket"

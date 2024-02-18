@@ -1,7 +1,7 @@
 properties ([
 	parameters ([
 		string(name: 'APP_NAME', defaultValue: 'create-image-k8s-infer-cli', description: '', trim: true),
-		string(name: 'GIT_URL', defaultValue: 'https://github.com/dbha/img-classification.git', description: '', trim: true),
+        string(name: 'GIT_URL', defaultValue: 'https://github.com/dbha/img-classification.git', description: '', trim: true),
         string(name: 'BRANCH_NAME', defaultValue: 'main', description: '', trim: true),
 		string(name: 'IMAGE_TAG', defaultValue: 'dbha/k8s-infer-cli-image', description: '', trim: true),
         password(name: 'DOCKER_PASSWORD', defaultValue: 'SECRET', description: 'A secret password'),

@@ -897,7 +897,7 @@ options:
 
 $ NAMESPACE=s3
 $ k delete secret dockerhub -n ${NAMESPACE}
-$ k create secret docker-registry dockerhub --docker-username=${DOCKER_USER} --docker-bGatyb2DFTb942EzxJJ0fbhE5CslwBt5joFzFi4Y=${DOCKER_bGatyb2DFTb942EzxJJ0fbhE5CslwBt5joFzFi4Y} -n ${NAMESPACE}
+$ k create secret docker-registry dockerhub --docker-username=${DOCKER_USER} --docker-password=${DOCKER_PASSWORD} -n ${NAMESPACE}
 
 $ k get secret -n ${NAMESPACE}
 NAME        TYPE                             DATA   AGE
