@@ -1,69 +1,67 @@
 # Overview
+This Repo is about Inference Testing ImageNet Image using CLI(k8s-infer) developed in Python. k8s-infer CLI includes the following functions.   
+     - Inference through Pretrained Torchvision Model   
+     - Error handling for parameter input values when performing CLI    
+     - Perform Inference using Kubernetes Resource (Pod or Job) 
+     - Perform Image Inference using Object Storage and Local Path  
+     - A plan to recycle pytorch checkpoints downloaded with pretrained weights (a plan to avoid repeated downloads)    
 
-본 Page는 Cloud Backend Engineer Technical Interview 과제수행에 대한 내용으로, 전체 아키텍처 및 SW 설계내역 그리고 CLI 테스트 내역으로 이루어져 있습니다. 또한 과제수행을 하면서 발생했던 제약사항 및 미진행사항 그리고 향후 개선내역등이 포함되어 있습니다.  
 
-이 Repo 는 python으로 개발된 CLI를 사용하여 ImageNet Image를 Inference Test 하는 내용으로 k8s-infer CLI는 다음과 같은 기능이 포함되어 있습니다.
-
-
+In addition, I also considered a Batch Pipeline(Jenkinsfile) to infer a large number of images in Object Storage and a plan to prevent Kubernetes Resource overwhelmed due to excessive CLI use.    
 
 ## Tasks    
-1. Command Line Interface 개발 
-    - Create a CLI tool named k8s-infer using Python
-    - Pretrained Torchvision Model을 통한 Inference   
-    - CLI 수행시 Parameter Input 값에 대한 에러 처리
-    - Kubernetes Resource(Pod or Job)를 활용한 Inference 수행
-    - Pretrained된 weight으로 다운로드 된 pytorch checkpoint 재활용 방안(반복되는 다운로드 회피 방안)
+1. Development of Command Line Interface    
+    - Create a CLI tool named k8s-infer using Python   
+    - Inference through Pretrained Torchvision Model   
+    - Error handling for parameter input values when performing CLI    
+    - Perform Inference using Kubernetes Resource (Pod or Job) 
+    - A plan to recycle pytorch checkpoints downloaded with pretrained weights (a plan to avoid repeated downloads)    
 
 2. Scheduling
-    - 과도한 CLI 사용에 따른 Kubernetes Resource 자원부족에 대비한 확장형 CLI 개발
-    - queue 혹은 workflow manager 같은 솔루션 활용
-
-3. Documentation
-    - README.md 생성(installaion 지침, CLI 사용법, Running Test, 기술적 제약점 및 향후 개선사항등)
+    - Measures to prepare for Kubernetes resource shortage due to excessive CLI use 
+    - Creating a batch pipeline using Jenkins   
 
 ## Develop Environment  
-- pipenv를 통한 python 가상화 환경(Local)
-- 주요 Python Package로 python3.10, argparse, setuptools, torchvision1.13.1
-- Local K8s를 위한 kind cluster
+    - Python virtualization environment (Local) through pipenv  
+    - Main Python Packages include python3.10, argparse, setuptools, torchvision1.13.1  
+    - kind cluster for local K8s    
 
 ## Contents
 ```
-- INTRODUCTION.md 내용 Review
-- 아키텍처 및 구현방안 ( Platform/SW/CLI UseCase)
-- CLI Packaging 내역 (Local, Pipeline을 통한 지속적인 CI 수행)
+- Architecture and implementation plan ( Platform/SW/CLI UseCase)
+- CLI Packaging (Continuous CI performance through local and pipeline)
 - CASE TEST(Running Test) For Task1
-- Scheduling (For Task2)
-- TO-BE (아키텍처/lessons learned)
-- Q&A
+- Scheduling For Task2
+- TO-BE (Architecture/lessons learned)
 ```
 
-## 아키텍처 및 구현방안
-### 1) 전체 Architecture
+## Architecture and implementation plan
+### 1) Whole Architecture
 <img src="images/architecture-overview-init.png" >  
 
-### 2) 이미지 Inference를 위한 Logic 구현 방안   
+### 2) Logic implementation plan for image inference  
 <img src="images/inference-model-flow.png" >  
 
-### 3) k8s-infer CLI 활용방안
+### 3) How to use k8s-infer CLI
 <img src="images/k8s-infer-operation.png" >     
 
 
 ## CLI Packaging
 ```bash
-### 1. pipenv 를 통한 가상화 환경 설정
-# python 가상화 환경을 위한 pipenv install
+### 1. Virtualization environment setup through pipenv  
+# pipenv install for python virtualization environment  
 $ brew install pipenv  # mac
 
-# pipenv 를 통해 패키지를 관리하고 하는 디렉토리로 이동 및 필요한 python 버전 설치
+# Manage packages through pipenv, navigate to the directory, and install the required python version.   
 $ cd {TARGET_DIR}
 $ pipenv --python 3.10
 
-# 위 명령어 실행후 Pipfile과 Pipfile.lock 파일이 생성되며, pipenv shell을 통해 가상화 환경 activation
+# After executing the above command, Pipfile and Pipfile.lock files are created, and the virtualization environment is activated through pipenv shell.  
 $ pipenv shell
 Launching subshell in virtual environment...
  . /Users/dbha/.local/share/virtualenvs/technical-interview-cloud-engineer-dbha-pr-qk9o-Xq4/bin/activate
 
-(technical-interview-cloud-engineer-dbha-private)  dbha  ~/Workspaces/rebellions/technical-interview-cloud-engineer-dbha-private
+(technical-interview-cloud-engineer-dbha-private)  dbha  ~/Workspaces/git/img-classification
 
 # python 실행시 3.10 버전으로 설치 확인
 $ python
@@ -103,7 +101,7 @@ setup(
 
 ### 3. 패키징 수행
 $ pip install .
-Processing /Users/dbha/Workspaces/rebellions/technical-interview-cloud-engineer-dbha-private/k8s_infer
+Processing /Users/dbha/Workspaces/git/img-classification/k8s_infer
   Preparing metadata (setup.py) ... done
 Requirement already satisfied: argon2-cffi==23.1.0 in /Users/dbha/.local/share/virtualenvs/technical-interview-cloud-engineer-dbha-pr-qk9o-Xq4/lib/python3.10/site-packages (from k8s-infer==0.0.1) (23.1.0)
 Requirement already satisfied: argon2-cffi-bindings==21.2.0 in /Users/dbha/.local/share/virtualenvs/technical-interview-cloud-engineer-dbha-pr-qk9o-Xq4/lib/python3.10/site-packages (from k8s-infer==0.0.1) (21.2.0)
@@ -902,7 +900,7 @@ metadata:
 ...
 
 # 배포할 yaml 파일 확인
-$ cat ~/Workspaces/rebellions/technical-interview-cloud-engineer-dbha-private/k8s/k8s-infer-alexnet-job.yaml
+$ cat ~/Workspaces/git/img-classification/k8s/k8s-infer-alexnet-job.yaml
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -953,7 +951,7 @@ Switched to context "kind-mytest".
 $ k delete job --all -n ${NAMESPACE}
 
 # yaml 파일을 통한 실행
-$ ./k8s-infer --type S3 --yaml ~/Workspaces/rebellions/technical-interview-cloud-engineer-dbha-private/k8s/k8s-infer-alexnet-job.yaml
+$ ./k8s-infer --type S3 --yaml ~/Workspaces/git/img-classification/k8s/k8s-infer-alexnet-job.yaml
 Start to deploy workload on Kubernetes
 job.batch/k8s-infer-alexnet-job created
 Deployment successful!
@@ -1121,7 +1119,7 @@ input_tensor:
 class id: 795: 'ski',: 90.68837761878967%
 ```
 ```bash
-$ cat ~/Workspaces/rebellions/technical-interview-cloud-engineer-dbha-private/k8s/k8s-infer-renset18-googlenet-job.yaml
+$ cat ~/Workspaces/git/img-classification/k8s/k8s-infer-renset18-googlenet-job.yaml
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -1155,7 +1153,7 @@ spec:
           value: "imagenet-classes"
       restartPolicy: Never
 
-$ ./k8s-infer --type S3 --yaml ~/Workspaces/rebellions/technical-interview-cloud-engineer-dbha-private/k8s/k8s-infer-renset18-googlenet-job.yaml
+$ ./k8s-infer --type S3 --yaml ~/Workspaces/git/img-classification/k8s/k8s-infer-renset18-googlenet-job.yaml
 Start to deploy workload on Kubernetes
 job.batch/k8s-infer-renset18-googlenet-job created
 Deployment successful!
@@ -1483,7 +1481,7 @@ class id: 795: 'ski',: 90.18017053604126%
 # Pod 배포시 PV로 volume mount 수행
 
 # PVC 가 적용된 Job manifest 
-$ cat ~/Workspaces/rebellions/technical-interview-cloud-engineer-dbha-private/k8s/k8s-infer-alexnet-googlenet-job.yaml
+$ cat ~/Workspaces/git/img-classification/k8s/k8s-infer-alexnet-googlenet-job.yaml
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -1555,9 +1553,9 @@ $ k get pvc -n ${NAMESPACE}
 NAME            STATUS    VOLUME   CAPACITY   ACCESS MODES   STORAGECLASS   AGE
 k8s-infer-pvc   Pending                                      standard       17s
 
-$ ./k8s-infer --type S3 --yaml ~/Workspaces/rebellions/technical-interview-cloud-engineer-dbha-private/k8s/k8s-infer-alexnet-googlenet-job.yaml
+$ ./k8s-infer --type S3 --yaml ~/Workspaces/git/img-classification/k8s/k8s-infer-alexnet-googlenet-job.yaml
 Start to deploy workload on Kubernetes
-yaml_path is  /Users/dbha/Workspaces/rebellions/technical-interview-cloud-engineer-dbha-private/k8s/k8s-infer-alexnet-googlenet-job.yaml
+yaml_path is  /Users/dbha/Workspaces/git/img-classification/k8s/k8s-infer-alexnet-googlenet-job.yaml
 job.batch/k8s-infer-alexnet-googlenet-pv-job created
 Deployment successful!
 
@@ -1613,9 +1611,9 @@ pod/k8s-infer-renset18-googlenet-job-ms9wc   0/1     Completed   0          33m
 NAME                                  STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   AGE
 persistentvolumeclaim/k8s-infer-pvc   Bound    pvc-b564d8e1-5164-46ac-b52f-d473add2a4c5   1Gi        RWO            standard       5m9s
 
-$ ./k8s-infer --type S3 --yaml ~/Workspaces/rebellions/technical-interview-cloud-engineer-dbha-private/k8s/k8s-infer-alexnet-googlenet-job.yaml
+$ ./k8s-infer --type S3 --yaml ~/Workspaces/git/img-classification/k8s/k8s-infer-alexnet-googlenet-job.yaml
 Start to deploy workload on Kubernetes
-yaml_path is  /Users/dbha/Workspaces/rebellions/technical-interview-cloud-engineer-dbha-private/k8s/k8s-infer-alexnet-googlenet-job.yaml
+yaml_path is  /Users/dbha/Workspaces/git/img-classification/k8s/k8s-infer-alexnet-googlenet-job.yaml
 job.batch/k8s-infer-alexnet-googlenet-pv-job created
 Deployment successful!
 
