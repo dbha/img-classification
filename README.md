@@ -108,6 +108,7 @@ setup(
 ```
 
 ### 3. Perform packaging
+```bash
 $ cd k8s_infer
 $ pip install .
 Processing /Users/dbha/Workspaces/git/img-classification/k8s_infer
