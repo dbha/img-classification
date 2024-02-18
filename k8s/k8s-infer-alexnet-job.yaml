@@ -1,0 +1,32 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: k8s-infer-alexnet-job
+  namespace: s3
+spec:
+  template:
+    metadata:
+      labels:
+        app: k8s-infer-alexnet-job
+    spec:
+      containers:
+      - name: k8s-infer
+        image: dbha/k8s-infer-cli-image:3
+        env:
+        - name: WORKLOAD
+          value: "C"  # C or L
+        - name: TYPE
+          value: "S3"
+        - name: MODELS
+          value: "alexnet"
+        - name: ENDPOINT
+          value: "minio-svc.minio-dev:9000"
+        - name: ACCESS_KEY
+          value: "rebellion"
+        - name: SECRET_KEY
+          value: "password"
+        - name: IMAGE_BUCKET
+          value: "images"
+        - name: CLASSES_BUCKET
+          value: "imagenet-classes"
+      restartPolicy: Never        

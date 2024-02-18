@@ -1,0 +1,47 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: k8s-infer-alexnet-googlenet-pv-job
+  namespace: s3
+spec:
+  template:
+    metadata:
+      labels:
+        app: k8s-infer-alexnet-googlenet-pv-job
+    spec:
+      volumes:
+      - name: k8s-infer-volume
+        persistentVolumeClaim:
+          claimName: k8s-infer-pvc
+      containers:
+      - name: k8s-infer
+        image: dbha/k8s-infer-cli-image:3
+        resources:
+          requests:
+            memory: "1024Mi"
+            cpu: "1000m"
+          limits:
+            memory: "2048Mi"
+            cpu: "2000m"
+        env:
+        - name: WORKLOAD
+          value: "C"  # C or L
+        - name: TYPE
+          value: "S3"        
+        - name: MODELS
+          value: "alexnet,googlenet"
+        - name: ENDPOINT
+          value: "minio-svc.minio-dev:9000"
+        - name: ACCESS_KEY
+          value: "rebellion"
+        - name: SECRET_KEY
+          value: "password"
+        - name: IMAGE_BUCKET
+          value: "images"
+        - name: CLASSES_BUCKET
+          value: "imagenet-classes"
+        volumeMounts:
+        - name: k8s-infer-volume
+          mountPath: /root/.cache/torch/hub/checkpoints
+      restartPolicy: Never
+
