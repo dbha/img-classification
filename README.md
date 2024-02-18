@@ -59,17 +59,19 @@ $ pipenv --python 3.10
 # After executing the above command, Pipfile and Pipfile.lock files are created, and the virtualization environment is activated through pipenv shell.  
 $ pipenv shell
 Launching subshell in virtual environment...
- . /Users/dbha/.local/share/virtualenvs/technical-interview-cloud-engineer-dbha-pr-qk9o-Xq4/bin/activate
+ . /Users/dbha/.local/share/virtualenvs/img-classification/bin/activate
 
 (technical-interview-cloud-engineer-dbha-private)  dbha  ~/Workspaces/git/img-classification
 
-# python 실행시 3.10 버전으로 설치 확인
+# When running python, check that version 3.10 is installed.
 $ python
 Python 3.10.13 (main, Jan 10 2024, 15:04:45) [Clang 15.0.0 (clang-1500.1.0.2.5)] on darwin
 Type "help", "copyright", "credits" or "license" for more information.
 
 
-### 2. python 프로젝트를 package 하기 위해 setuptools 모듈을 통한 setup.py 생성
+### 2. Create setup.py through the setuptools module to package the python project.
+```bash
+cd k8s_infer
 
 from setuptools import setup, find_packages
 
@@ -98,8 +100,9 @@ setup(
             "k8s-infer = k8s_infer.cli:main"      
         ]
     }    
+```
 
-### 3. 패키징 수행
+### 3. Perform packaging
 $ pip install .
 Processing /Users/dbha/Workspaces/git/img-classification/k8s_infer
   Preparing metadata (setup.py) ... done
@@ -120,12 +123,12 @@ $ ls -lrt k8s-infer
 ```
 
 ```bash
-### CI 측면에서의 지속적인 CLI 및 Container Image 생성 ###
+### Continuous CLI and Container Image creation from CI perspective ###
 # Requirement 
-- Source 변경에 따른 지속적인 CLI 배포 필요(Object Storage)
-- K8s 배포를 위한 Container Image 생성 필요
+- Continuous CLI deployment required due to source changes(Object Storage)
+- Container Image creation required for K8s deployment
 
-# Jenkins 접속후 Pipeline 확인
+# Check pipeline
 $ https://github.com/dbha/technical-interview-cloud-engineer-dbha-private/blob/main/01_Jenkinsfile_Create_Image_k8s_infer_cli
 
 ```

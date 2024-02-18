@@ -1,0 +1,122 @@
+properties ([
+	parameters ([
+		string(name: 'APP_NAME', defaultValue: 'create-image-k8s-infer-cli', description: '', trim: true),
+		string(name: 'GIT_URL', defaultValue: 'https://github.com/dbha/technical-interview-cloud-engineer-dbha-private.git', description: '', trim: true),
+        string(name: 'BRANCH_NAME', defaultValue: 'main', description: '', trim: true),
+		string(name: 'IMAGE_TAG', defaultValue: 'dbha/k8s-infer-cli-image', description: '', trim: true),
+        password(name: 'DOCKER_PASSWORD', defaultValue: 'SECRET', description: 'A secret password'),
+	])
+])
+
+pipeline {
+   
+    agent {
+        kubernetes {
+            defaultContainer 'jnlp'
+            yaml """
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+     app.kubernetes.io/name: jenkins-build
+     app.kubernetes.io/component: jenkins-build
+     app.kubernetes.io/version: "1"
+spec:
+  containers:
+  - name: k8s-infer-agent
+    image: dbha/k8s-jenkins-agent-python310:v1
+    imagePullPolicy: Always
+    securityContext:
+      privileged: true
+    command:
+    - sleep
+    args:
+    - infinity
+"""
+        }
+    }
+
+    stages {
+
+        stage('Fetch from GitHub') {
+            steps {
+                dir("app"){
+                    git(
+                        poll: true,
+                        changelog: true,
+                        branch: "${BRANCH_NAME}",
+                        credentialsId: "github-jenkins-id-token",
+                        url: "${GIT_URL}"
+                    )
+                    sh 'git rev-parse HEAD > git-commit.txt'
+                }
+            }
+        }
+
+        stage('Install Package for k8s-inter CLI') {
+            steps {
+                container('k8s-infer-agent') {
+                    sh '''#!/bin/bash -e
+                        ls -lrt
+                        pwd
+                        cd app
+                        echo "=============== Start Install Packaging For k8s-infer CLI ==============="
+                        pip install -r k8s_infer/k8s_infer/requirements.txt
+                        echo "=============== Start Packaging k8s-infer CLI ==============="
+                        ls -alrt
+                        pwd
+                        pushd ./
+                        cd k8s_infer
+                        ls -alrt
+                        pip install .
+                        ls -lrt /usr/local/bin/k8s-infer
+                        echo "k8s-infer CLI Test"
+                        k8s-infer --help
+                        popd
+                    '''
+                }
+            }
+        }
+
+        stage('Upload k8s-inter CLI') {
+            steps {
+                container('k8s-infer-agent') {
+                    sh '''#!/bin/sh -e
+                        echo "Connect Object Storage"
+                        mc config host add minio-dev http://minio-svc.minio-dev.svc.cluster.local:9000 rebellion password --api S3v4
+                        mc ls minio-dev
+                        
+                        echo "Upload k8s-infer CLI into cli Bucket"
+                        mc cp /usr/local/bin/k8s-infer minio-dev/cli/k8s-infer
+                        mc ls minio-dev/cli/
+                        echo "Finished Upload CLI"
+                    '''
+                }
+            }
+        }
+
+        stage('Create Image') {
+            steps {
+                container('k8s-infer-agent') {
+                    sh '''#!/bin/bash -e
+                        ls -alrt
+                        pwd
+                        echo "start podman Build"
+                        cd app
+                        pushd ./
+                        cd k8s
+                        cp /usr/local/bin/k8s-infer ./
+                        cp -R ../k8s_infer/k8s_infer ./
+                        ls -lrt
+                        cp Dockerfile-create-k8s-infer-base Dockerfile
+                        podman --version
+                        podman login docker.io -u dbha -p ${DOCKER_PASSWORD}
+                        podman build -t ${IMAGE_TAG}:${BUILD_NUMBER} .
+                        popd
+                        podman push ${IMAGE_TAG}:${BUILD_NUMBER}
+                    '''
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,108 @@
+properties ([
+	parameters ([
+		string(name: 'WORKLOAD', defaultValue: 'C', description: '', trim: true),        
+		string(name: 'TYPE', defaultValue: 'S3', description: '', trim: true),
+		string(name: 'MODELS', defaultValue: 'alexnet', description: 'Please input one of the Torchvision models.', trim: true),
+    string(name: 'ENDPOINT', defaultValue: 'minio-svc.minio-dev:9000', description: 'Please Input S3 API Endpoint', trim: true),
+    string(name: 'ACCESS_KEY', defaultValue: 'rebellion', description: 'S3 Access Key'),
+    string(name: 'SECRET_KEY', defaultValue: 'password', description: 'S3 SECRET_KEY'),        
+    string(name: 'IMAGE_BUCKET', defaultValue: 'batch-images', description: 'S3 bucket where the image to be inferred is stored', trim: true),
+    string(name: 'CLASSES_BUCKET', defaultValue: 'imagenet-classes', description: 'image classification file', trim: true),
+	])
+])
+
+pipeline {
+    agent {
+        kubernetes {
+            defaultContainer 'jnlp'
+            yaml """
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+     app.kubernetes.io/name: jenkins-build
+     app.kubernetes.io/component: jenkins-build
+     app.kubernetes.io/version: "1"
+spec:
+  volumes:
+  - name: k8s-infer-volume
+    persistentVolumeClaim:
+      claimName: alexnet-batch-job-pvc
+  containers:
+  - name: alexnet-batch-job
+    image: dbha/k8s-infer-cli-image:3
+    imagePullPolicy: Always
+    securityContext:
+      privileged: true
+    env:
+    - name: WORKLOAD
+      value: \${params.WORKLOAD}      
+    - name: TYPE
+      value: \${params.TYPE}     
+    - name: MODELS
+      value: \${params.MODELS}      
+    - name: ENDPOINT
+      value: \${params.ENDPOINT}     
+    - name: ACCESS_KEY
+      value: \${params.ACCESS_KEY}  
+    - name: SECRET_KEY
+      value: \${params.SECRET_KEY}     
+    - name: IMAGE_BUCKET
+      value: \${params.IMAGE_BUCKET}           
+    - name: CLASSES_BUCKET
+      value: \${params.CLASSES_BUCKET}    
+    volumeMounts:
+        - name: k8s-infer-volume
+          mountPath: /root/.cache/torch/hub/checkpoints        
+    command:
+    - sleep
+    args:
+    - infinity
+"""
+        }
+    }
+    
+    stages {
+        stage('Start Job for inference') {
+            steps {
+                container('alexnet-batch-job') {
+                    sh '''#!/bin/bash -e
+                        ls -alrt
+                        pwd
+                        echo "Start Job"
+
+                        echo "Models :"${MODELS}
+                        echo "S3 Endpoint : "${ACCESS_KEY}
+                        echo "IMAGE_BUCKET : "${IMAGE_BUCKET}
+                        echo "CLASSES_BUCKET : "${CLASSES_BUCKET}
+
+                        echo -e "\nStart Inference"
+                        /config/start.sh > /tmp/inference_${MODELS}_batch_$(date +%y%m%d%H%M).log
+                        echo -e "\nFinish Inference\n"
+                        ls -lrt /tmp/inference_${MODELS}_*.log
+                    '''
+                }
+            }
+        }
+
+        stage('Upload inference log') {
+            steps {
+                container('alexnet-batch-job') {
+                    sh '''#!/bin/bash -e
+                        echo -e "\nCheck Log"
+                        cat /tmp/inference_${MODELS}_*.log
+
+                        echo "Connect Object Storage"
+                        mc config host add minio-dev http://minio-svc.minio-dev.svc.cluster.local:9000 rebellion password --api S3v4
+                        mc ls minio-dev
+                        
+                        echo -e "\nUpload Job Log into inference-job-log-from-pipeline Bucket"
+                        mc cp /tmp/inference_${MODELS}_*.log minio-dev/inference-job-log-from-pipeline/
+                        mc ls minio-dev/inference-job-log-from-pipeline/
+                        echo "\n Finished Upload logfile "
+                    '''
+                }
+            }
+        }       
+    }
+}
