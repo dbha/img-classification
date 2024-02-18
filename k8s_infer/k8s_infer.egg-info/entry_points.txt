@@ -1,0 +1,2 @@
+[console_scripts]
+k8s-infer = k8s_infer.cli:main

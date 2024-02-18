@@ -4,7 +4,7 @@ setup(
     name="k8s-infer",
     version="0.0.1",
     author="dbha",
-    author_email="dbha0719@gamil.com",
+    author_email="dbha0719@gmail.com",
     description=("demonstrate python module and tool packaging."),
     # long_description=long_description,
     # long_description_content_type="text/markdown",

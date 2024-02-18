@@ -83,7 +83,7 @@ spec:
                 container('k8s-infer-agent') {
                     sh '''#!/bin/sh -e
                         echo "Connect Object Storage"
-                        mc config host add minio-dev http://minio-svc.minio-dev.svc.cluster.local:9000 dbha0719 password --api S3v4
+                        mc config host add minio-dev http://minio-svc.minio-dev.svc.cluster.local:9000 dbha0719 bGatyb2DFTb942EzxJJ0fbhE5CslwBt5joFzFi4Y --api S3v4
                         mc ls minio-dev
                         
                         echo "Upload k8s-infer CLI into cli Bucket"

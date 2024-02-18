@@ -22,9 +22,9 @@ spec:
         - name: ENDPOINT
           value: "minio-svc.minio-dev:9000"
         - name: ACCESS_KEY
-          value: "dbha0719"
+          value: "pxLFj7m4sFiLj7GZaOsA"
         - name: SECRET_KEY
-          value: "password"
+          value: "bGatyb2DFTb942EzxJJ0fbhE5CslwBt5joFzFi4Y"
         - name: IMAGE_BUCKET
           value: "images"
         - name: CLASSES_BUCKET

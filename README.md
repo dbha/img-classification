@@ -59,9 +59,9 @@ $ pipenv --python 3.10
 # After executing the above command, Pipfile and Pipfile.lock files are created, and the virtualization environment is activated through pipenv shell.  
 $ pipenv shell
 Launching subshell in virtual environment...
- . /Users/dbha/.local/share/virtualenvs/img-classification/bin/activate
+ . /Users/dbha/.local/share/virtualenvs/img-classification-ePWnLRIA/bin/activate
 
-(technical-interview-cloud-engineer-dbha-private)  dbha  ~/Workspaces/git/img-classification
+(img-classification)  dbha  ~/Workspaces/git/img-classification
 
 # When running python, check that version 3.10 is installed.
 $ python
@@ -69,9 +69,9 @@ Python 3.10.13 (main, Jan 10 2024, 15:04:45) [Clang 15.0.0 (clang-1500.1.0.2.5)]
 Type "help", "copyright", "credits" or "license" for more information.
 
 
-### 2. Create setup.py through the setuptools module to package the python project.
+### 2. Check setup.py through the setuptools module to package the python project.
 ```bash
-cd k8s_infer
+cat k8s_infer/setup.py
 
 from setuptools import setup, find_packages
 
@@ -79,7 +79,7 @@ setup(
     name="k8s-infer",
     version="0.0.1",
     author="dbha",
-    author_email="dbha0719@gamil.com",
+    author_email="pxLFj7m4sFiLj7GZaOsA@gmail.com",
     description=("demonstrate python module and tool packaging."),
     # long_description=long_description,
     # long_description_content_type="text/markdown",
@@ -90,35 +90,48 @@ setup(
     ],
     install_requires=[
         'argon2-cffi==23.1.0',
-    ...
+        'argon2-cffi-bindings==21.2.0',
+        'black==23.12.1',
+        'boto3==1.34.16',
+        'botocore==1.34.16',
+...
     ],
     # packages=find_packages(include=['k8s_infer', 'k8s_infer.*']),
     packages=find_packages(),
     python_requires=">=3.6",
     entry_points={
         "console_scripts": [
-            "k8s-infer = k8s_infer.cli:main"      
+            "k8s-infer = k8s_infer.cli:main"
         ]
-    }    
+    }
+)    
 ```
 
 ### 3. Perform packaging
+$ cd k8s_infer
 $ pip install .
 Processing /Users/dbha/Workspaces/git/img-classification/k8s_infer
   Preparing metadata (setup.py) ... done
-Requirement already satisfied: argon2-cffi==23.1.0 in /Users/dbha/.local/share/virtualenvs/img-classification-qk9o-Xq4/lib/python3.10/site-packages (from k8s-infer==0.0.1) (23.1.0)
-Requirement already satisfied: argon2-cffi-bindings==21.2.0 in /Users/dbha/.local/share/virtualenvs/img-classification-qk9o-Xq4/lib/python3.10/site-packages (from k8s-infer==0.0.1) (21.2.0)
+Collecting argon2-cffi==23.1.0 (from k8s-infer==0.0.1)
+  Using cached argon2_cffi-23.1.0-py3-none-any.whl.metadata (5.2 kB)
+Collecting argon2-cffi-bindings==21.2.0 (from k8s-infer==0.0.1)
+  Using cached argon2_cffi_bindings-21.2.0-cp38-abi3-macosx_10_9_universal2.whl (53 kB)
+Collecting black==23.12.1 (from k8s-infer==0.0.1)
+  Using cached black-23.12.1-cp310-cp310-macosx_10_9_x86_64.whl.metadata (68 kB)
+Collecting boto3==1.34.16 (from k8s-infer==0.0.1)
+  Using cached boto3-1.34.16-py3-none-any.whl.metadata (6.6 kB)
+Collecting botocore==1.34.16 (from k8s-infer==0.0.1)
+  Using cached botocore-1.34.16-py3-none-any.whl.metadata (5.6 kB)
+Collecting charset-normalizer==3.3.2 (from k8s-infer==0.0.1)
 ....
-...
+Downloading platformdirs-4.2.0-py3-none-any.whl (17 kB)
+Building wheels for collected packages: k8s-infer
+  Building wheel for k8s-infer (setup.py) ... done
+  Created wheel for k8s-infer: filename=k8s_infer-0.0.1-py3-none-any.whl size=7313 sha256=cb689ef531108570e298ec5d89b6c8ee5c54938a693accc62adee6b9e9058066
+  Stored in directory: /private/var/folders/l8/1lv7lk596qd08pl83spb___80000gp/T/pip-ephem-wheel-cache-5lgebcn7/wheels/9c/48/6c/5b3a7a3258bde27b728e9fa2eac2477044ce68bc60d75b7e43
 Successfully built k8s-infer
-Installing collected packages: k8s-infer
-  Attempting uninstall: k8s-infer
-    Found existing installation: k8s-infer 0.0.1
-    Uninstalling k8s-infer-0.0.1:
-      Successfully uninstalled k8s-infer-0.0.1
-Successfully installed k8s-infer-0.0.1
 
-$ ls -lrt k8s-infer
+$ ls -lrt /Users/dbha/.local/share/virtualenvs/img-classification-ePWnLRIA/bin/k8s-infer
 -rwxr-xr-x@ 1 dbha  staff  295 Jan 19 18:10 k8s-infer
 ```
 
@@ -141,8 +154,8 @@ mkdir -p /tmp/local/existing/imagenet-classes/
 mkdir -p /tmp/local/existing/images/
 
 cp ~/Workspaces/git/img-classification/k8s_infer/imagenet_classes.txt  /tmp/local/existing/imagenet-classes/
-cp ~//Workspaces/git/images/ILSVRC2012_val_00000099.JPEG  /tmp/local/existing/images/
-cp ~//Workspaces/git/images/ILSVRC2012_val_00000100.JPEG  /tmp/local/existing/images/
+cp ~//Workspaces/git/img-classification/images/ILSVRC2012_val_00000099.JPEG  /tmp/local/existing/images/
+cp ~//Workspaces/git/img-classification/images/ILSVRC2012_val_00000100.JPEG  /tmp/local/existing/images/
 ```
 ```bash
 # CASE1 is a method of inference by specifying the location of a pre-stored image in a Local Laptop.
@@ -224,9 +237,9 @@ valid image_type : /root/test.JPEG
 
 
 model_class :  <function googlenet at 0x11a8c23b0>
-/Users/dbha/.local/share/virtualenvs/img-classification-qk9o-Xq4/lib/python3.10/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+/Users/dbha/.local/share/virtualenvs/img-classification-ePWnLRIA/lib/python3.10/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
   warnings.warn(
-/Users/dbha/.local/share/virtualenvs/img-classification-qk9o-Xq4/lib/python3.10/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=GoogLeNet_Weights.IMAGENET1K_V1`. You can also use `weights=GoogLeNet_Weights.DEFAULT` to get the most up-to-date weights.
+/Users/dbha/.local/share/virtualenvs/img-classification-ePWnLRIA/lib/python3.10/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=GoogLeNet_Weights.IMAGENET1K_V1`. You can also use `weights=GoogLeNet_Weights.DEFAULT` to get the most up-to-date weights.
   warnings.warn(msg)
 
 An unexpected error occurred: [Errno 2] No such file or directory: '/root/test.JPEG'
@@ -242,9 +255,9 @@ valid image_type : /tmp/local/existing/images/ILSVRC2012_val_00000099.JPEG
 
 
 model_class :  <function googlenet at 0x10bca63b0>
-/Users/dbha/.local/share/virtualenvs/img-classification-qk9o-Xq4/lib/python3.10/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+/Users/dbha/.local/share/virtualenvs/img-classification-ePWnLRIA/lib/python3.10/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
   warnings.warn(
-/Users/dbha/.local/share/virtualenvs/img-classification-qk9o-Xq4/lib/python3.10/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=GoogLeNet_Weights.IMAGENET1K_V1`. You can also use `weights=GoogLeNet_Weights.DEFAULT` to get the most up-to-date weights.
+/Users/dbha/.local/share/virtualenvs/img-classification-ePWnLRIA/lib/python3.10/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=GoogLeNet_Weights.IMAGENET1K_V1`. You can also use `weights=GoogLeNet_Weights.DEFAULT` to get the most up-to-date weights.
   warnings.warn(msg)
 Downloading: "https://download.pytorch.org/models/googlenet-1378be20.pth" to /Users/dbha/.cache/torch/hub/checkpoints/googlenet-1378be20.pth
 100.0%
@@ -282,9 +295,9 @@ valid image_type : /tmp/local/existing/images/ILSVRC2012_val_00000100.JPEG
 
 
 model_class :  <function googlenet at 0x1089c63b0>
-/Users/dbha/.local/share/virtualenvs/img-classification-qk9o-Xq4/lib/python3.10/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+/Users/dbha/.local/share/virtualenvs/img-classification-ePWnLRIA/lib/python3.10/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
   warnings.warn(
-/Users/dbha/.local/share/virtualenvs/img-classification-qk9o-Xq4/lib/python3.10/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=GoogLeNet_Weights.IMAGENET1K_V1`. You can also use `weights=GoogLeNet_Weights.DEFAULT` to get the most up-to-date weights.
+/Users/dbha/.local/share/virtualenvs/img-classification-ePWnLRIA/lib/python3.10/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=GoogLeNet_Weights.IMAGENET1K_V1`. You can also use `weights=GoogLeNet_Weights.DEFAULT` to get the most up-to-date weights.
   warnings.warn(msg)
 input_tensor:  tensor([[[-0.3198,  0.1083,  0.7933,  ...,  0.6734,  0.8618,  0.8104],
          [ 0.2624,  0.3994,  0.5878,  ...,  0.5878,  0.3823,  0.5364],
@@ -321,9 +334,9 @@ valid image_type : /tmp/local/existing/images/ILSVRC2012_val_00000100.JPEG
 
 
 model_class :  <function resnet50 at 0x120810820>
-/Users/dbha/.local/share/virtualenvs/img-classification-qk9o-Xq4/lib/python3.10/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+/Users/dbha/.local/share/virtualenvs/img-classification-ePWnLRIA/lib/python3.10/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
   warnings.warn(
-/Users/dbha/.local/share/virtualenvs/img-classification-qk9o-Xq4/lib/python3.10/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=ResNet50_Weights.IMAGENET1K_V1`. You can also use `weights=ResNet50_Weights.DEFAULT` to get the most up-to-date weights.
+/Users/dbha/.local/share/virtualenvs/img-classification-ePWnLRIA/lib/python3.10/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=ResNet50_Weights.IMAGENET1K_V1`. You can also use `weights=ResNet50_Weights.DEFAULT` to get the most up-to-date weights.
   warnings.warn(msg)
 input_tensor:  tensor([[[-0.3198,  0.1083,  0.7933,  ...,  0.6734,  0.8618,  0.8104],
          [ 0.2624,  0.3994,  0.5878,  ...,  0.5878,  0.3823,  0.5364],
@@ -352,7 +365,7 @@ class id: 349: 'bighorn, bighorn sheep, cimarron, Rocky Mountain bighorn, Rocky 
 
 
 model_class :  <function alexnet at 0x1160bb130>
-/Users/dbha/.local/share/virtualenvs/img-classification-qk9o-Xq4/lib/python3.10/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=AlexNet_Weights.IMAGENET1K_V1`. You can also use `weights=AlexNet_Weights.DEFAULT` to get the most up-to-date weights.
+/Users/dbha/.local/share/virtualenvs/img-classification-ePWnLRIA/lib/python3.10/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=AlexNet_Weights.IMAGENET1K_V1`. You can also use `weights=AlexNet_Weights.DEFAULT` to get the most up-to-date weights.
   warnings.warn(msg)
 input_tensor:  tensor([[[-0.3198,  0.1083,  0.7933,  ...,  0.6734,  0.8618,  0.8104],
          [ 0.2624,  0.3994,  0.5878,  ...,  0.5878,  0.3823,  0.5364],
@@ -393,7 +406,7 @@ please Input endpoint and access_key and secret_key and images_bucket and images
 
 $ login minio console and check buckets
 
-$ ./k8s-infer --models resnet50 --type S3 --endpoint localhost:9000 --access_key ${ACCESS_KEY} --secret_key password --images_bucket images --classes_bucket imagenet-classes 
+$ ./k8s-infer --models resnet50 --type S3 --endpoint localhost:9000 --access_key pxLFj7m4sFiLj7GZaOsA --secret_key bGatyb2DFTb942EzxJJ0fbhE5CslwBt5joFzFi4Y --images_bucket images --classes_bucket imagenet-classes 
 
 valid model : resnet50
 type:  S3
@@ -407,9 +420,9 @@ Downloaded: ILSVRC2012_val_00000005.JPEG -> /tmp/local/s3/download-s3-images/ILS
 
 
 model_class :  <function resnet50 at 0x1183e4820>
-/Users/dbha/.local/share/virtualenvs/img-classification-qk9o-Xq4/lib/python3.10/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+/Users/dbha/.local/share/virtualenvs/img-classification-ePWnLRIA/lib/python3.10/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
   warnings.warn(
-/Users/dbha/.local/share/virtualenvs/img-classification-qk9o-Xq4/lib/python3.10/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=ResNet50_Weights.IMAGENET1K_V1`. You can also use `weights=ResNet50_Weights.DEFAULT` to get the most up-to-date weights.
+/Users/dbha/.local/share/virtualenvs/img-classification-ePWnLRIA/lib/python3.10/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=ResNet50_Weights.IMAGENET1K_V1`. You can also use `weights=ResNet50_Weights.DEFAULT` to get the most up-to-date weights.
   warnings.warn(msg)
 /tmp/local/s3/imagenet-classes/imagenet_classes.txt
 image_file_path /tmp/local/s3/download-s3-images/ILSVRC2012_val_00000005.JPEG
@@ -548,7 +561,7 @@ input_tensor:
 class id: 65: 'sea snake',: 56.147974729537964%
 ```
 ```bash
-$ ./k8s-infer --models resnet50,resnet18 --type S3 --endpoint localhost:9000 --access_key dbha0719 --secret_key password --images_bucket images --classes_bucket imagenet-classes 
+$ ./k8s-infer --models resnet50,resnet18 --type S3 --endpoint localhost:9000 --access_key pxLFj7m4sFiLj7GZaOsA --secret_key bGatyb2DFTb942EzxJJ0fbhE5CslwBt5joFzFi4Y --images_bucket images --classes_bucket imagenet-classes 
 valid model : resnet50
 valid model : resnet18
 type:  S3
@@ -562,9 +575,9 @@ Downloaded: ILSVRC2012_val_00000005.JPEG -> /tmp/local/s3/download-s3-images/ILS
 
 
 model_class :  <function resnet50 at 0x1136e8820>
-/Users/dbha/.local/share/virtualenvs/img-classification-qk9o-Xq4/lib/python3.10/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+/Users/dbha/.local/share/virtualenvs/img-classification-ePWnLRIA/lib/python3.10/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
   warnings.warn(
-/Users/dbha/.local/share/virtualenvs/img-classification-qk9o-Xq4/lib/python3.10/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=ResNet50_Weights.IMAGENET1K_V1`. You can also use `weights=ResNet50_Weights.DEFAULT` to get the most up-to-date weights.
+/Users/dbha/.local/share/virtualenvs/img-classification-ePWnLRIA/lib/python3.10/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=ResNet50_Weights.IMAGENET1K_V1`. You can also use `weights=ResNet50_Weights.DEFAULT` to get the most up-to-date weights.
   warnings.warn(msg)
 /tmp/local/s3/imagenet-classes/imagenet_classes.txt
 image_file_path /tmp/local/s3/download-s3-images/ILSVRC2012_val_00000005.JPEG
@@ -712,7 +725,7 @@ Downloaded: ILSVRC2012_val_00000005.JPEG -> /tmp/local/s3/download-s3-images/ILS
 
 
 model_class :  <function resnet18 at 0x1136e84c0>
-/Users/dbha/.local/share/virtualenvs/img-classification-qk9o-Xq4/lib/python3.10/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=ResNet18_Weights.IMAGENET1K_V1`. You can also use `weights=ResNet18_Weights.DEFAULT` to get the most up-to-date weights.
+/Users/dbha/.local/share/virtualenvs/img-classification-ePWnLRIA/lib/python3.10/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=ResNet18_Weights.IMAGENET1K_V1`. You can also use `weights=ResNet18_Weights.DEFAULT` to get the most up-to-date weights.
   warnings.warn(msg)
 /tmp/local/s3/imagenet-classes/imagenet_classes.txt
 image_file_path /tmp/local/s3/download-s3-images/ILSVRC2012_val_00000005.JPEG
@@ -886,7 +899,7 @@ options:
 
 $ NAMESPACE=s3
 $ k delete secret dockerhub -n ${NAMESPACE}
-$ k create secret docker-registry dockerhub --docker-username=${DOCKER_USER} --docker-password=${DOCKER_PASSWORD} -n ${NAMESPACE}
+$ k create secret docker-registry dockerhub --docker-username=${DOCKER_USER} --docker-bGatyb2DFTb942EzxJJ0fbhE5CslwBt5joFzFi4Y=${DOCKER_bGatyb2DFTb942EzxJJ0fbhE5CslwBt5joFzFi4Y} -n ${NAMESPACE}
 
 $ k get secret -n ${NAMESPACE}
 NAME        TYPE                             DATA   AGE
@@ -928,9 +941,9 @@ spec:
         - name: ENDPOINT
           value: "minio-svc.minio-dev:9000"
         - name: ACCESS_KEY
-          value: "dbha0719"
+          value: "pxLFj7m4sFiLj7GZaOsA"
         - name: SECRET_KEY
-          value: "password"
+          value: "bGatyb2DFTb942EzxJJ0fbhE5CslwBt5joFzFi4Y"
         - name: IMAGE_BUCKET
           value: "images"
         - name: CLASSES_BUCKET
@@ -1147,9 +1160,9 @@ spec:
         - name: ENDPOINT
           value: "minio-svc.minio-dev:9000"
         - name: ACCESS_KEY
-          value: "dbha0719"
+          value: "pxLFj7m4sFiLj7GZaOsA"
         - name: SECRET_KEY
-          value: "password"
+          value: "bGatyb2DFTb942EzxJJ0fbhE5CslwBt5joFzFi4Y"
         - name: IMAGE_BUCKET
           value: "images"
         - name: CLASSES_BUCKET
@@ -1520,9 +1533,9 @@ spec:
         - name: ENDPOINT
           value: "minio-svc.minio-dev:9000"
         - name: ACCESS_KEY
-          value: "dbha0719"
+          value: "pxLFj7m4sFiLj7GZaOsA"
         - name: SECRET_KEY
-          value: "password"
+          value: "bGatyb2DFTb942EzxJJ0fbhE5CslwBt5joFzFi4Y"
         - name: IMAGE_BUCKET
           value: "images"
         - name: CLASSES_BUCKET
