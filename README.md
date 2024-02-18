@@ -70,7 +70,7 @@ Type "help", "copyright", "credits" or "license" for more information.
 
 
 ### 2. Check setup.py through the setuptools module to package the python project.
-cat k8s_infer/setup.py
+$ cat k8s_infer/setup.py
 
 from setuptools import setup, find_packages
 
