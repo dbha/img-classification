@@ -4,7 +4,7 @@ properties ([
 		string(name: 'TYPE', defaultValue: 'S3', description: '', trim: true),
 		string(name: 'MODELS', defaultValue: 'resnet50,googlenet', description: 'Please input one of the Torchvision models.', trim: true),
     string(name: 'ENDPOINT', defaultValue: 'minio-svc.minio-dev:9000', description: 'Please Input S3 API Endpoint', trim: true),
-    string(name: 'ACCESS_KEY', defaultValue: 'dbha0719', description: 'S3 Access Key'),
+    string(name: 'ACCESS_KEY', defaultValue: 'pxLFj7m4sFiLj7GZaOsA', description: 'S3 Access Key'),
     string(name: 'SECRET_KEY', defaultValue: 'bGatyb2DFTb942EzxJJ0fbhE5CslwBt5joFzFi4Y', description: 'S3 SECRET_KEY'),        
     string(name: 'IMAGE_BUCKET', defaultValue: 'batch-images', description: 'S3 bucket where the image to be inferred is stored', trim: true),
     string(name: 'CLASSES_BUCKET', defaultValue: 'imagenet-classes', description: 'image classification file', trim: true),
