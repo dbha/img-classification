@@ -82,8 +82,10 @@ spec:
             steps {
                 container('k8s-infer-agent') {
                     sh '''#!/bin/sh -e
+                        ACCESS_KEY="pxLFj7m4sFiLj7GZaOsA"
+                        SECRET_KEY="bGatyb2DFTb942EzxJJ0fbhE5CslwBt5joFzFi4Y"
                         echo "Connect Object Storage"
-                        mc config host add minio-dev http://minio-svc.minio-dev.svc.cluster.local:9000 dbha0719 bGatyb2DFTb942EzxJJ0fbhE5CslwBt5joFzFi4Y --api S3v4
+                        mc config host add minio-dev http://minio-svc.minio-dev.svc.cluster.local:9000 ${ACCESS_KEY} ${SECRET_KEY} --api S3v4
                         mc ls minio-dev
                         
                         echo "Upload k8s-infer CLI into cli Bucket"
@@ -110,7 +112,7 @@ spec:
                         ls -lrt
                         cp Dockerfile-create-k8s-infer-base Dockerfile
                         podman --version
-                        podman login docker.io -u dbha -p ${DOCKER_PASSWORD}
+                        podman login docker.io -u ${DOCKER_USER} -p ${DOCKER_PASSWORD}
                         podman build -t ${IMAGE_TAG}:${BUILD_NUMBER} .
                         popd
                         podman push ${IMAGE_TAG}:${BUILD_NUMBER}
