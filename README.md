@@ -140,8 +140,6 @@ $ ls -lrt /Users/dbha/.local/share/virtualenvs/img-classification-ePWnLRIA/bin/k
 - Continuous CLI deployment required due to source changes(Object Storage)
 - Container Image creation required for K8s deployment
 
-# Sample pipeline
-$ https://github.com/dbha/img-classification/blob/main/pipeline/01_Jenkinsfile_Create_Image_k8s_infer_cli
 ```
 ## CASE TEST (For Task1)
 ### k8s-infer Operation by CASE1
