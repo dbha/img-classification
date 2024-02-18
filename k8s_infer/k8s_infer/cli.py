@@ -1,3 +1,6 @@
+####################################################################################################
+## The following code is only for functional testing without considering performance and efficiency.
+####################################################################################################
 
 import argparse
 import click
@@ -19,16 +22,16 @@ from minio import Minio
 from minio.error import S3Error
 
 
-# 모델명 vaildation 확인
+# Check model name validation
 def check_pretrained_model(input_model_name):
 
-    # 허용가능한 models 추출
+    # Extract acceptable models
     all_model_names = [name for name in dir(models) if callable(getattr(models, name))]
 
-    # non-model 필터링 
+    # non-model filtering
     all_model_names = [name for name in all_model_names if not name.startswith("__")]
 
-    # 모델명 포힘여부 확인
+    # Check whether model name is included
     for model_name in all_model_names:
         if model_name.lower() == input_model_name.lower():
         #   print(f"{input_model_name} is right model")
@@ -40,10 +43,10 @@ def check_pretrained_model(input_model_name):
         
     return check_result
 
-# 이미지 file type 체크
+# Check image file type
 def check_file_type(input_image_name):
 
-    # 파일위치, 파일명 분리
+    # Separate file location and file name
     directory, file_name = os.path.split(input_image_name)
     root, extension = os.path.splitext(file_name)
 
@@ -53,7 +56,7 @@ def check_file_type(input_image_name):
     else:
         return False
 
-# K8s 에 배포
+# Deploy on K8s
 def deploy_kubernetes(yaml, dict, type):
     try:
         print("Start to deploy workload on Kubernetes")
@@ -63,25 +66,25 @@ def deploy_kubernetes(yaml, dict, type):
         print(f"Error deploying YAML file: {e}")
         sys.exit(0)
 
-# Object Storage 로부터 이미지 다운로드
+# Download image from Object Storage
 def download_image_from_minio(endpoint, access_key, secret_key, bucket, bucket_type, yaml, type, workload):
 
-    # S3 로부터 이미지를 다운받은 위치는 크게 2가지
-    # yaml 파일이 있으면 Container 안에서 호출하는 것으로 다운로드 위치는 /tmp/container/s3 
-    # yaml이 공백이면 Laptop 에서 호출되는 것으로 다운로드 위치는 /tmp/local/s3 
+    # There are two main locations to download images from S3.
+    # If there is a yaml file, it is called from within the container and the download location is /tmp/container/s3
+    # If yaml is blank, it is called from Laptop and the download location is /tmp/local/s3
 
     try:
-        # MinIO 서버에 연결
+       # Connect to MinIO server
         minio_client = Minio(endpoint, access_key, secret_key, secure=False)
 
-        # # MinIO 버킷에서 이미지 다운로드(한건)
+        # Download images from MinIO bucket (one item)
         # minio_client.fget_object(bucket, object_name, local_folder)
 
-        # MinIO 버킷 내의 모든 객체 목록 가져오기
+        # Get a list of all objects within the MinIO bucket
         objects = minio_client.list_objects(bucket, recursive=True)
 
         # if type is not None and type.strip() == "Local":
-        # Container 로 이미지를 다운로드 하는 경우
+        # When downloading images into Container
         if workload.strip() == "C":
             if bucket_type == 'images':
                 # local_folder = "/config/download-s3-images"
@@ -90,7 +93,7 @@ def download_image_from_minio(endpoint, access_key, secret_key, bucket, bucket_t
                 # local_folder = "/config/imagenet-classes"
                 local_folder = "/tmp/container/s3/imagenet-classes"  
         else:
-            # Laptop 으로 이미지를 다운로드 하는 경우
+            # When downloading images using Laptop
             if bucket_type == 'images':
                 local_folder = "/tmp/local/s3/download-s3-images"
             else:
@@ -99,12 +102,12 @@ def download_image_from_minio(endpoint, access_key, secret_key, bucket, bucket_t
         os.makedirs(local_folder, exist_ok=True)
         delete_files_in_directory(local_folder)
 
-        # 각 객체를 다운로드하여 로컬에 저장
+        # Download each object and save it locally
         for obj in objects:
             object_name = obj.object_name 
             local_path = os.path.join(local_folder, object_name)
 
-            # MinIO 버킷에서 이미지 다운로드
+            # Download image from MinIO bucket
             minio_client.fget_object(bucket, object_name, local_path)
 
             print(f"Downloaded: {object_name} -> {local_path}")
@@ -112,10 +115,10 @@ def download_image_from_minio(endpoint, access_key, secret_key, bucket, bucket_t
         print(err)
         sys.exit(1)
 
-# Object Storage 로부터 다운로드후 inference 수행
+# Perform inference after downloading from Object Storage
 def inference_s3_image(input_model_name, input_image_name, endpoint, access_key, secret_key, images_bucket, classes_bucket, yaml, s3_dict, type, workload):
 
-    # kubectl 을 통해 Pod 배포 S3 통해 다운로드
+    # Deploy Pod via kubectl Download via S3
     if (yaml.strip() != "" and workload.strip() == ""):
         try:
             deploy_kubernetes(yaml, s3_dict, type)
@@ -123,16 +126,16 @@ def inference_s3_image(input_model_name, input_image_name, endpoint, access_key,
         except Exception as e:
             print(f"An unexpected error occurred: {e}")
 
-    # 배포된 컨테이너에서 S3 통해 다운로드    
+    # Download from deployed container through S3 
     if (yaml.strip() == "" and workload.strip() == "C"):
         try:    
-            # 컨테이너에서 다운로드
+            # Download from container
             download_image_from_minio(endpoint, access_key, secret_key, classes_bucket, 'classes', yaml, type, workload)
             download_image_from_minio(endpoint, access_key, secret_key, images_bucket, 'images', yaml, type, workload)
         except Exception as e:
             print(f"An unexpected error occurred: {e}")
     else:
-        # Laptop에서 다운로드
+        # Download from Laptop
         download_image_from_minio(endpoint, access_key, secret_key, classes_bucket, 'classes', yaml, type, workload)
         download_image_from_minio(endpoint, access_key, secret_key, images_bucket, 'images', yaml, type, workload)
 
@@ -149,7 +152,7 @@ def inference_s3_image(input_model_name, input_image_name, endpoint, access_key,
         transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
     ])
 
-    # ImageNet 데이터셋의 클래스를 컨테이너 안에서 가져오기
+    # Import the classes of the ImageNet dataset into the container
     if workload.strip() == "C":
         imagenet_classes_name='/tmp/container/s3/imagenet-classes'
     else:        
@@ -161,7 +164,7 @@ def inference_s3_image(input_model_name, input_image_name, endpoint, access_key,
         file_path = os.path.join(imagenet_classes_name, file_name)
         print(file_path)
 
-    # 컨테이너 안에서 classification을 위한 image 가져오기
+    # Import image for classification within the container
     if workload.strip() == "C":
         download_images_path_name='/tmp/container/s3/download-s3-images'
     else:
@@ -169,7 +172,7 @@ def inference_s3_image(input_model_name, input_image_name, endpoint, access_key,
     
     images_file_list = os.listdir(download_images_path_name)
 
-    # image에 대해 개별건으로 inference 수행
+    # Perform inference on images individually
     for image_file_name in images_file_list:
         image_file_path = os.path.join(download_images_path_name, image_file_name)
         print("image_file_path", image_file_path)
@@ -183,18 +186,18 @@ def inference_s3_image(input_model_name, input_image_name, endpoint, access_key,
         # prediction = model(batch).squeeze(0).softmax(0)
         prediction = model(input_batch).squeeze(0).softmax(0)
 
-        # ImageNet 데이터셋의 클래스 목록 가져오기
+       # Get a list of classes from the ImageNet dataset
         imagenet_classes_path = file_path
         with open(imagenet_classes_path) as f:
             classes = [line.strip() for line in f.readlines()]
 
-        # # 예측된 클래스 ID 가져오기
+        # Get predicted class ID
         class_id = prediction.argmax().item()
         score = prediction[class_id].item()
 
         # print("class_id : ", class_id)
 
-        # # 클래스 레이블 출력
+        # Output class label
         predicted_class_label = classes[class_id]
         # print(f"predicted_class_label: {predicted_class_label}")
     
@@ -203,33 +206,33 @@ def inference_s3_image(input_model_name, input_image_name, endpoint, access_key,
         print(f"class id: {predicted_class_label}: {100 * score}%\n")
 
 
-# Local에 저장된 이미지를 추론하는 함수
-# Local은 사용자 laptop 이거나 Container 일 수 있으며, 이는 yaml 파일을 통해 확인
-# 이미지 위치는 Container 의 경우 /tmp/s3 라는 디렉토리를 사용하며, 사용자 laptop일 경우 /tmp/local 디렉토리 사용
-# Local환경에서의 Container 사용의미는 k8s-infer --yaml 을 Pod를 통해 Local 이미지를 읽어서 추론한다는 의미 
+# Function to infer images stored locally
+# Local can be the user's laptop or a container, which can be confirmed through the yaml file
+# The image location uses a directory called /tmp/s3 for Container, and /tmp/local directory for user laptop.
+# The meaning of using Container in a local environment means that k8s-infer --yaml is inferred by reading the local image through Pod.
 def inference_local_image(input_model_name, input_image_name, yaml, local_dict, type):
         
-    # 두가지 형태가 있으며 input 파라미터를 통해 이미지를 직접 입력한 경우와 Local laptop 의 특정위치(/tmp/local/existing)에 저장된
-    # 이미지를 읽어들이는 방식이 있음
+    # There are two types: when the image is directly entered through the input parameter and when the image is saved in a specific location (/tmp/local/existing) on the local laptop.
+    # There is a way to read images
 
     model_class = getattr(models, input_model_name, None)
     print("\n\nmodel_class : ", model_class)
 
-    model = model_class(pretrained=True)   # 입력받은 모델을 생성, pretrained 매개변수를 통해서 사전 훈련된 가중치를 사용하여 초기화 한다.
+    model = model_class(pretrained=True)   # Create an input model and initialize it using pretrained weights through pretrained parameters.
 
-    model.eval()  # 모델을 추론 모드로 전환
+    model.eval()  # Put the model into inference mode
 
     # preprocess = weights.transforms()
 
-    # 이미지를 전처리하기 위한 여러 변환 함수들이 순서대로 적용된 변환 파이프라인 생성
+   # Create a transformation pipeline in which several transformation functions are applied in order to preprocess the image
     preprocess = transforms.Compose([
-        transforms.Resize(256),  # 이미지 크기 조절
+        transforms.Resize(256),  # Adjust image size
         transforms.CenterCrop(224),
-        transforms.ToTensor(),  # 이미지를 텐서로 변환
-        transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]), # 정규화
+        transforms.ToTensor(),  # Convert image to tensor
+        transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]), # normalization
     ])
 
-    # 입력받은 이미지 한건에 대한 추론
+    # Inference for one input image
     if input_image_name.strip() != "":
 
         try:
@@ -240,21 +243,19 @@ def inference_local_image(input_model_name, input_image_name, yaml, local_dict, 
             print("input_tensor: ", input_tensor)
             input_batch = input_tensor.unsqueeze(0)
 
-            # prediction = model(batch).squeeze(0).softmax(0)
-            prediction = model(input_batch).squeeze(0).softmax(0)   # softmax를 통해 해당 차원의 값들을 확률 값으로 변환
+            prediction = model(input_batch).squeeze(0).softmax(0)   # Convert the values of the relevant dimension into probability values through softmax
         
-            # ImageNet 데이터셋의 클래스 목록 가져오기
-            imagenet_classes_path = "/tmp/local/existing/imagenet-classes/imagenet_classes.txt"  # 클래스 목록 파일을 로컬에 다운로드
+            # Get a list of classes from the ImageNet dataset
+            imagenet_classes_path = "/tmp/local/existing/imagenet-classes/imagenet_classes.txt" # Download the class list file locally
             with open(imagenet_classes_path) as f:
                 classes = [line.strip() for line in f.readlines()]
 
-            # # 예측된 클래스 ID 가져오기 
-            class_id = prediction.argmax().item()  # 가장 높은 확률을 가진 클래스 선택
+            # Get predicted class ID
+            class_id = prediction.argmax().item()  # Select the class with the highest probability
             score = prediction[class_id].item()
 
             # print("class_id : ", class_id)
 
-            # # 클래스 레이블 출력
             predicted_class_label = classes[class_id]
             # print(f"predicted_class_label: {predicted_class_label}")
         
@@ -265,34 +266,34 @@ def inference_local_image(input_model_name, input_image_name, yaml, local_dict, 
         except Exception as e:    
             print(f"\nAn unexpected error occurred: {e}")
 
-    # 컨테이너에서 로컬 디렉토리를 읽어서 처리 /tmp/local/existing       
+    # Read and process the local directory in the container /tmp/local/existing       
     else:
-        # Container 를 통해 추론 시작
+        # Start inference through Container
         if yaml.strip() != "":
             try:
                 deploy_kubernetes(yaml, s3_dict, type)
             except Exception as e:
                 print(f"An unexpected error occurred: {e}")
 
-# 입력값 None에 대한 공백처리
+# Blank processing for input value None
 def process_args(args):
     for key, value in vars(args).items():
-        # value가 None이면 공백으로 초기화
+        # If value is None, initialized to blank
         setattr(args, key, '' if value is None else value)
 
 def delete_files_in_directory(directory):
-    # 디렉토리 안의 모든 파일 목록 가져오기
+    # Get a list of all files in a directory
     file_list = os.listdir(directory)
 
-    # 디렉토리 안의 각 파일에 대해 삭제 수행
+    # Perform deletion for each file in the directory
     for filename in file_list:
         file_path = os.path.join(directory, filename)
         try:
             if os.path.isfile(file_path):
-                # 파일인 경우 삭제
+                # Delete if it is a file
                 os.remove(file_path)
             elif os.path.isdir(file_path):
-                # 디렉토리인 경우 재귀적으로 호출하여 디렉토리 안의 파일 삭제
+                # If it is a directory, call it recursively to delete the files in the directory
                 delete_files_in_directory(file_path)
         except Exception as e:
             print(f"Error deleting {file_path}: {e}")
@@ -301,7 +302,6 @@ def delete_files_in_directory(directory):
 def main():
 
     parser = argparse.ArgumentParser(
-        # description="An over-simplified downloader to demonstrate python packaging."
         description="k8s-infer CLI to demonstrate ml inference leveraging torchvision model"
     )
     parser.add_argument(
@@ -317,7 +317,7 @@ def main():
         help="Input Local or S3"
     )
 
-    # S3 Option일 경우, 파라미터 체크
+    # In case of S3 Option, check parameters
     parser.add_argument(
         "--endpoint", type=str,
         help="Input s3 end_point"
@@ -350,7 +350,7 @@ def main():
     
     args = parser.parse_args()
 
-    # 값이 None인 경우 공백으로 초기화
+    # If the value is None, initialized to blank
     process_args(args)
 
     # input_model_name = args.models
@@ -366,7 +366,7 @@ def main():
     workload         = args.workload
     
     if args.models:
-        # 쉼표로 구분된 값을 리스트로 분리
+        # Separate comma separated values into a list
         model_list = args.models.split(',')
     else:
         if yaml.strip() == "":
@@ -374,19 +374,16 @@ def main():
             sys.exit(0)
 
     try:
-        # Non K8s 실행 (Local)
+        # Run Non K8s (Local)
         if yaml.strip() == "":
 
-            # 입력된 Model 에 대한 확인
+            # Check the entered Model
             for model_str in model_list:
-                # 쉼표로 구분된 값을 리스트로 분리
+                # Separate comma separated values into a list
                 values = model_str.split(',')
 
                 for input_model_name in values:
-                    # models 및 type 입력 확인
-                    # if input_model_name is None or input_model_name.strip() == "":
-                    #     print("Please Input input_model_name\n")
-                    #     sys.exit(0)
+                    # Check models and type input
                     check_model=check_pretrained_model(input_model_name)
 
                     if check_model:
@@ -403,8 +400,8 @@ def main():
 
             print("type: ", type)
 
-            # k8s-cli로 Local 디렉토리에 있는 이미지 추론
-            # Local에 추론해야 할 대상 이미지가 사전에 저장되어 있어야 함
+            # Infer images in local directory with k8s-cli
+            # The target image to be inferred must be stored in advance locally.
             if type.strip() == "Local":
                 # print("\nCall inference_local_image")
 
@@ -465,19 +462,17 @@ def main():
                 print(f"invaild type : {type}")
                 sys.exit(0)      
 
-        # K8s 실행 (Container)        
+        # Run K8s (Container)        
         else:
             # Use Local Path
-            # Container 안에서 Image를 다운로드 하지 않고 Laptop 이미지를 읽어서 추론
-            # print("Deploy on Kubernetes")
-            # print("type is", type)
-            # 우선은 kubernets 배포는 S3만 허용!
+            # Infer by reading the laptop image without downloading the image in the container
+            # In this case, only S3 is allowed for kubernetes deployment
 
             if args.models or endpoint.strip() !='' or access_key.strip() !='' or secret_key.strip() !='' or images_bucket !='':
                 print("To use kubernetes, Only Input parameter --type --yaml")
                 sys.exit(0)
 
-            # 허용하지 않음(only S3만) -> PV hostpath 및 PVC를 활용해야 함
+            # Not allowed (only S3) -> PV hostpath and PVC must be utilized
             if type.strip() == "Local":
                 print("In the current version, type only allows S3.")
                 sys.exit(0)
@@ -485,9 +480,9 @@ def main():
                 # local_dict = {"models_key": input_model_name, "input_image_name_key": input_image_name}
                 # inference_local_image(input_model_name, input_image_name, yaml, local_dict, type)
 
-            # Container 안에서 Image를 다운로드 후 다운로드 된 이미지를 읽어서 추론
+            # After downloading the image within the container, infer by reading the downloaded image
             elif type.strip() == "S3": 
-                input_model_name=""  # 공백으로 초기화 yaml안에 모델이 들어가 있음
+                input_model_name=""  # The model is included in the initialized yaml with blank space.
                 s3_dict = {"models_key": "", "endpoint_key": "", "access_key": "", "secret_key": "", "images_bucket_key": "", "classes_bucket_key": ""}
                 inference_s3_image(input_model_name, input_image_name, endpoint, access_key, secret_key, images_bucket, classes_bucket, yaml, s3_dict, type, workload)
             else:
