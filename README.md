@@ -106,8 +106,8 @@ setup(
 $ pip install .
 Processing /Users/dbha/Workspaces/git/img-classification/k8s_infer
   Preparing metadata (setup.py) ... done
-Requirement already satisfied: argon2-cffi==23.1.0 in /Users/dbha/.local/share/virtualenvs/technical-interview-cloud-engineer-dbha-pr-qk9o-Xq4/lib/python3.10/site-packages (from k8s-infer==0.0.1) (23.1.0)
-Requirement already satisfied: argon2-cffi-bindings==21.2.0 in /Users/dbha/.local/share/virtualenvs/technical-interview-cloud-engineer-dbha-pr-qk9o-Xq4/lib/python3.10/site-packages (from k8s-infer==0.0.1) (21.2.0)
+Requirement already satisfied: argon2-cffi==23.1.0 in /Users/dbha/.local/share/virtualenvs/img-classification-qk9o-Xq4/lib/python3.10/site-packages (from k8s-infer==0.0.1) (23.1.0)
+Requirement already satisfied: argon2-cffi-bindings==21.2.0 in /Users/dbha/.local/share/virtualenvs/img-classification-qk9o-Xq4/lib/python3.10/site-packages (from k8s-infer==0.0.1) (21.2.0)
 ....
 ...
 Successfully built k8s-infer
@@ -145,7 +145,7 @@ cp ~//Workspaces/git/images/ILSVRC2012_val_00000099.JPEG  /tmp/local/existing/im
 cp ~//Workspaces/git/images/ILSVRC2012_val_00000100.JPEG  /tmp/local/existing/images/
 ```
 ```bash
-# CASE1은 Local 환경에서 사전에 저장된 image 위치를 지정하여 Inference 하는 방식입니다.
+# CASE1 is a method of inference by specifying the location of a pre-stored image in a Local Laptop.
 
 # Help 
 $ ./k8s-infer --help
@@ -174,7 +174,7 @@ options:
   --workload WORKLOAD   How to get images to make inferences, In this case, default is ' '.
 ```
 ```bash
-# Error Test(파라미터 미지정, 이미지파일 type, 이미지파일 미접근, 다중모델명등)
+# Error Test(Parameter unspecified, image file type, image file not accessed, multiple model names, etc.)
 $ ./k8s-infer --models
 usage: k8s-infer [-h] [--models model1,model2,model3] [--image IMAGE] [--type TYPE] [--endpoint ENDPOINT] [--access_key ACCESS_KEY] [--secret_key SECRET_KEY] [--images_bucket IMAGES_BUCKET] [--classes_bucket CLASSES_BUCKET]
                  [--yaml YAML] [--workload WORKLOAD]
@@ -224,9 +224,9 @@ valid image_type : /root/test.JPEG
 
 
 model_class :  <function googlenet at 0x11a8c23b0>
-/Users/dbha/.local/share/virtualenvs/technical-interview-cloud-engineer-dbha-pr-qk9o-Xq4/lib/python3.10/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+/Users/dbha/.local/share/virtualenvs/img-classification-qk9o-Xq4/lib/python3.10/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
   warnings.warn(
-/Users/dbha/.local/share/virtualenvs/technical-interview-cloud-engineer-dbha-pr-qk9o-Xq4/lib/python3.10/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=GoogLeNet_Weights.IMAGENET1K_V1`. You can also use `weights=GoogLeNet_Weights.DEFAULT` to get the most up-to-date weights.
+/Users/dbha/.local/share/virtualenvs/img-classification-qk9o-Xq4/lib/python3.10/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=GoogLeNet_Weights.IMAGENET1K_V1`. You can also use `weights=GoogLeNet_Weights.DEFAULT` to get the most up-to-date weights.
   warnings.warn(msg)
 
 An unexpected error occurred: [Errno 2] No such file or directory: '/root/test.JPEG'
@@ -242,9 +242,9 @@ valid image_type : /tmp/local/existing/images/ILSVRC2012_val_00000099.JPEG
 
 
 model_class :  <function googlenet at 0x10bca63b0>
-/Users/dbha/.local/share/virtualenvs/technical-interview-cloud-engineer-dbha-pr-qk9o-Xq4/lib/python3.10/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+/Users/dbha/.local/share/virtualenvs/img-classification-qk9o-Xq4/lib/python3.10/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
   warnings.warn(
-/Users/dbha/.local/share/virtualenvs/technical-interview-cloud-engineer-dbha-pr-qk9o-Xq4/lib/python3.10/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=GoogLeNet_Weights.IMAGENET1K_V1`. You can also use `weights=GoogLeNet_Weights.DEFAULT` to get the most up-to-date weights.
+/Users/dbha/.local/share/virtualenvs/img-classification-qk9o-Xq4/lib/python3.10/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=GoogLeNet_Weights.IMAGENET1K_V1`. You can also use `weights=GoogLeNet_Weights.DEFAULT` to get the most up-to-date weights.
   warnings.warn(msg)
 Downloading: "https://download.pytorch.org/models/googlenet-1378be20.pth" to /Users/dbha/.cache/torch/hub/checkpoints/googlenet-1378be20.pth
 100.0%
@@ -282,9 +282,9 @@ valid image_type : /tmp/local/existing/images/ILSVRC2012_val_00000100.JPEG
 
 
 model_class :  <function googlenet at 0x1089c63b0>
-/Users/dbha/.local/share/virtualenvs/technical-interview-cloud-engineer-dbha-pr-qk9o-Xq4/lib/python3.10/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+/Users/dbha/.local/share/virtualenvs/img-classification-qk9o-Xq4/lib/python3.10/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
   warnings.warn(
-/Users/dbha/.local/share/virtualenvs/technical-interview-cloud-engineer-dbha-pr-qk9o-Xq4/lib/python3.10/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=GoogLeNet_Weights.IMAGENET1K_V1`. You can also use `weights=GoogLeNet_Weights.DEFAULT` to get the most up-to-date weights.
+/Users/dbha/.local/share/virtualenvs/img-classification-qk9o-Xq4/lib/python3.10/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=GoogLeNet_Weights.IMAGENET1K_V1`. You can also use `weights=GoogLeNet_Weights.DEFAULT` to get the most up-to-date weights.
   warnings.warn(msg)
 input_tensor:  tensor([[[-0.3198,  0.1083,  0.7933,  ...,  0.6734,  0.8618,  0.8104],
          [ 0.2624,  0.3994,  0.5878,  ...,  0.5878,  0.3823,  0.5364],
@@ -321,9 +321,9 @@ valid image_type : /tmp/local/existing/images/ILSVRC2012_val_00000100.JPEG
 
 
 model_class :  <function resnet50 at 0x120810820>
-/Users/dbha/.local/share/virtualenvs/technical-interview-cloud-engineer-dbha-pr-qk9o-Xq4/lib/python3.10/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+/Users/dbha/.local/share/virtualenvs/img-classification-qk9o-Xq4/lib/python3.10/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
   warnings.warn(
-/Users/dbha/.local/share/virtualenvs/technical-interview-cloud-engineer-dbha-pr-qk9o-Xq4/lib/python3.10/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=ResNet50_Weights.IMAGENET1K_V1`. You can also use `weights=ResNet50_Weights.DEFAULT` to get the most up-to-date weights.
+/Users/dbha/.local/share/virtualenvs/img-classification-qk9o-Xq4/lib/python3.10/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=ResNet50_Weights.IMAGENET1K_V1`. You can also use `weights=ResNet50_Weights.DEFAULT` to get the most up-to-date weights.
   warnings.warn(msg)
 input_tensor:  tensor([[[-0.3198,  0.1083,  0.7933,  ...,  0.6734,  0.8618,  0.8104],
          [ 0.2624,  0.3994,  0.5878,  ...,  0.5878,  0.3823,  0.5364],
@@ -352,7 +352,7 @@ class id: 349: 'bighorn, bighorn sheep, cimarron, Rocky Mountain bighorn, Rocky 
 
 
 model_class :  <function alexnet at 0x1160bb130>
-/Users/dbha/.local/share/virtualenvs/technical-interview-cloud-engineer-dbha-pr-qk9o-Xq4/lib/python3.10/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=AlexNet_Weights.IMAGENET1K_V1`. You can also use `weights=AlexNet_Weights.DEFAULT` to get the most up-to-date weights.
+/Users/dbha/.local/share/virtualenvs/img-classification-qk9o-Xq4/lib/python3.10/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=AlexNet_Weights.IMAGENET1K_V1`. You can also use `weights=AlexNet_Weights.DEFAULT` to get the most up-to-date weights.
   warnings.warn(msg)
 input_tensor:  tensor([[[-0.3198,  0.1083,  0.7933,  ...,  0.6734,  0.8618,  0.8104],
          [ 0.2624,  0.3994,  0.5878,  ...,  0.5878,  0.3823,  0.5364],
@@ -381,9 +381,9 @@ class id: 349: 'bighorn, bighorn sheep, cimarron, Rocky Mountain bighorn, Rocky 
 ```
 ### k8s-infer Operation by CASE2
 ```bash
-# In this case, minio의 API endpoint 는 9090으로 port-forwarding을 한 상태입니다.
-# type 이 S3 일 경우 Object Storage로부터 이미지 다운후, 다운받은 이미지를 대상으로 추론하는 방식입니다.
-# http://localhost:9090 접근후 minio console 접속
+# In this case, minio's API endpoint is port-forwarded to 9090.
+# If the type is S3, the method is to download the image from Object Storage and then infer the downloaded image.
+# After accessing http://localhost:9090, connect to minio console
 
 $ ./k8s-infer --models resnet50 --type S3
 valid model : resnet50
@@ -407,9 +407,9 @@ Downloaded: ILSVRC2012_val_00000005.JPEG -> /tmp/local/s3/download-s3-images/ILS
 
 
 model_class :  <function resnet50 at 0x1183e4820>
-/Users/dbha/.local/share/virtualenvs/technical-interview-cloud-engineer-dbha-pr-qk9o-Xq4/lib/python3.10/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+/Users/dbha/.local/share/virtualenvs/img-classification-qk9o-Xq4/lib/python3.10/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
   warnings.warn(
-/Users/dbha/.local/share/virtualenvs/technical-interview-cloud-engineer-dbha-pr-qk9o-Xq4/lib/python3.10/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=ResNet50_Weights.IMAGENET1K_V1`. You can also use `weights=ResNet50_Weights.DEFAULT` to get the most up-to-date weights.
+/Users/dbha/.local/share/virtualenvs/img-classification-qk9o-Xq4/lib/python3.10/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=ResNet50_Weights.IMAGENET1K_V1`. You can also use `weights=ResNet50_Weights.DEFAULT` to get the most up-to-date weights.
   warnings.warn(msg)
 /tmp/local/s3/imagenet-classes/imagenet_classes.txt
 image_file_path /tmp/local/s3/download-s3-images/ILSVRC2012_val_00000005.JPEG
@@ -548,7 +548,7 @@ input_tensor:
 class id: 65: 'sea snake',: 56.147974729537964%
 ```
 ```bash
-$ ./k8s-infer --models resnet50,resnet18 --type S3 --endpoint localhost:9000 --access_key ${ACCESS_KEY} --secret_key password --images_bucket images --classes_bucket imagenet-classes 
+$ ./k8s-infer --models resnet50,resnet18 --type S3 --endpoint localhost:9000 --access_key dbha0719 --secret_key password --images_bucket images --classes_bucket imagenet-classes 
 valid model : resnet50
 valid model : resnet18
 type:  S3
@@ -562,9 +562,9 @@ Downloaded: ILSVRC2012_val_00000005.JPEG -> /tmp/local/s3/download-s3-images/ILS
 
 
 model_class :  <function resnet50 at 0x1136e8820>
-/Users/dbha/.local/share/virtualenvs/technical-interview-cloud-engineer-dbha-pr-qk9o-Xq4/lib/python3.10/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+/Users/dbha/.local/share/virtualenvs/img-classification-qk9o-Xq4/lib/python3.10/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
   warnings.warn(
-/Users/dbha/.local/share/virtualenvs/technical-interview-cloud-engineer-dbha-pr-qk9o-Xq4/lib/python3.10/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=ResNet50_Weights.IMAGENET1K_V1`. You can also use `weights=ResNet50_Weights.DEFAULT` to get the most up-to-date weights.
+/Users/dbha/.local/share/virtualenvs/img-classification-qk9o-Xq4/lib/python3.10/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=ResNet50_Weights.IMAGENET1K_V1`. You can also use `weights=ResNet50_Weights.DEFAULT` to get the most up-to-date weights.
   warnings.warn(msg)
 /tmp/local/s3/imagenet-classes/imagenet_classes.txt
 image_file_path /tmp/local/s3/download-s3-images/ILSVRC2012_val_00000005.JPEG
@@ -712,7 +712,7 @@ Downloaded: ILSVRC2012_val_00000005.JPEG -> /tmp/local/s3/download-s3-images/ILS
 
 
 model_class :  <function resnet18 at 0x1136e84c0>
-/Users/dbha/.local/share/virtualenvs/technical-interview-cloud-engineer-dbha-pr-qk9o-Xq4/lib/python3.10/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=ResNet18_Weights.IMAGENET1K_V1`. You can also use `weights=ResNet18_Weights.DEFAULT` to get the most up-to-date weights.
+/Users/dbha/.local/share/virtualenvs/img-classification-qk9o-Xq4/lib/python3.10/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=ResNet18_Weights.IMAGENET1K_V1`. You can also use `weights=ResNet18_Weights.DEFAULT` to get the most up-to-date weights.
   warnings.warn(msg)
 /tmp/local/s3/imagenet-classes/imagenet_classes.txt
 image_file_path /tmp/local/s3/download-s3-images/ILSVRC2012_val_00000005.JPEG
@@ -853,8 +853,8 @@ class id: 65: 'sea snake',: 50.84747076034546%
 
 ### k8s-infer Operation by CASE3
 ```bash
-# CASE3는 k8s-infer CLI를 통해 kubernetes Job 으로 Inference를 진행하는 경우입니다.
-# 이를 위해 사용하는 옵션으로 yaml path 만을 허용합니다.
+# CASE3 is when inference is performed with a Kubernetes Job through k8s-infer CLI.
+# The option used for this purpose only allows yaml path.
 
 $ ./k8s-infer --help
 usage: k8s-infer [-h] [--models model1,model2,model3] [--image IMAGE] [--type TYPE] [--endpoint ENDPOINT] [--access_key ACCESS_KEY] [--secret_key SECRET_KEY] [--images_bucket IMAGES_BUCKET] [--classes_bucket CLASSES_BUCKET]
@@ -880,9 +880,9 @@ options:
   --yaml YAML           Enter the yaml path where you want to deploy Kubernetes. In this case, Only the --yaml file path and --type(S3 or Local) option must be used for deployment.
   --workload WORKLOAD   How to get images to make inferences, In this case, default is ' '.
 
-# kubernetes 에 배포하기전 사전 설정 사항
-# Container Image 접근을 위한 secret 생성
-# Application 실행을 위한 User(이 경우 default)가 해당 secret 을 가지고 있어야 함
+# Pre-configuration before deploying to kubernetes
+# Create secret to access container image
+# The user (default in this case) to run the application must have the corresponding secret
 
 $ NAMESPACE=s3
 $ k delete secret dockerhub -n ${NAMESPACE}
@@ -928,7 +928,7 @@ spec:
         - name: ENDPOINT
           value: "minio-svc.minio-dev:9000"
         - name: ACCESS_KEY
-          value: "${ACCESS_KEY}"
+          value: "dbha0719"
         - name: SECRET_KEY
           value: "password"
         - name: IMAGE_BUCKET
@@ -937,23 +937,23 @@ spec:
           value: "imagenet-classes"
       restartPolicy: Never
 
-# --type 및 --yaml 옵션을 통해 kubernetes를 통한 inference 
+# Inference via kubernetes via --type and --yaml options
 $ ./k8s-infer --type S3 --yaml
 usage: k8s-infer [-h] [--models model1,model2,model3] [--image IMAGE] [--type TYPE] [--endpoint ENDPOINT] [--access_key ACCESS_KEY] [--secret_key SECRET_KEY] [--images_bucket IMAGES_BUCKET] [--classes_bucket CLASSES_BUCKET]
                  [--yaml YAML] [--workload WORKLOAD]
 k8s-infer: error: argument --yaml: expected one argument\
 ```
 ```bash
-# kubernetes 배포하기 위한 context 설정
+# Setting up context to deploy Kubernetes
 $ k config get-contexts
 
 $ k config use-context kind-mytest
 Switched to context "kind-mytest".
 
-# 기존 job 삭제
+# Delete existing job
 $ k delete job --all -n ${NAMESPACE}
 
-# yaml 파일을 통한 실행
+# Execution via yaml file
 $ ./k8s-infer --type S3 --yaml ~/Workspaces/git/img-classification/k8s/k8s-infer-alexnet-job.yaml
 Start to deploy workload on Kubernetes
 job.batch/k8s-infer-alexnet-job created
@@ -1147,7 +1147,7 @@ spec:
         - name: ENDPOINT
           value: "minio-svc.minio-dev:9000"
         - name: ACCESS_KEY
-          value: "${ACCESS_KEY}"
+          value: "dbha0719"
         - name: SECRET_KEY
           value: "password"
         - name: IMAGE_BUCKET
@@ -1474,16 +1474,16 @@ input_tensor:
 class id: 795: 'ski',: 90.18017053604126%
 ```
 
-### 대용량 파일을 자주 다운로드하지 않도록 사전 훈련된 가중치의 다운로드된 PyTorch 체크포인트를 재사용하는 방안
+### A scheme to reuse downloaded PyTorch checkpoints with pre-trained weights to avoid frequent downloading of large files. 
 ```bash
-# 로컬에서 Pretrained 모델을 사용하는 경우 내부적으로 .cache 에 저장
-# 컨테이너의 경우 immutable 특성으로 인해 Job 수행시 매번 model을 다운 받아야 함
-# 이를 내부적으로 회피하기 위해 Persistent Volume 을 사용
+# If using a pretrained model locally, store it internally in .cache
+# In the case of containers, due to their immutable nature, the model must be downloaded every time a job is performed.
+# To avoid this internally, Persistent Volume is used
 
-# checkpoints 저장위치(~/.cache/torch/hub/checkpoints)
-# Pod 배포시 PV로 volume mount 수행
+# Checkpoints storage location (~/.cache/torch/hub/checkpoints)
+# Perform volume mount with PV when deploying pods
 
-# PVC 가 적용된 Job manifest 
+# Job manifest with PVC applied
 $ cat ~/Workspaces/git/img-classification/k8s/k8s-infer-alexnet-googlenet-job.yaml
 apiVersion: batch/v1
 kind: Job
@@ -1520,7 +1520,7 @@ spec:
         - name: ENDPOINT
           value: "minio-svc.minio-dev:9000"
         - name: ACCESS_KEY
-          value: "${ACCESS_KEY}"
+          value: "dbha0719"
         - name: SECRET_KEY
           value: "password"
         - name: IMAGE_BUCKET
@@ -1532,7 +1532,7 @@ spec:
           mountPath: /root/.cache/torch/hub/checkpoints
       restartPolicy: Never
 
-## PVC 배포
+## Create PVC
 
 $ k delete pvc k8s-infer-pvc -n ${NAMESPACE}
 
@@ -1602,7 +1602,7 @@ $ k logs -f k8s-infer-alexnet-googlenet-pv-job-dkmsq -n ${NAMESPACE} | grep Down
 Downloading: "https://download.pytorch.org/models/alexnet-owt-7be5be79.pth" to /root/.cache/torch/hub/checkpoints/alexnet-owt-7be5be79.pth
 Downloading: "https://download.pytorch.org/models/googlenet-1378be20.pth" to /root/.cache/torch/hub/checkpoints/googlenet-1378be20.pth
 
-# 최초 수행시 다운로드가 되며 Job 삭제후 재수행시 Download 여부 확인
+# It is downloaded when performed for the first time, and is checked for download when performed again after deleting the job.
 $ k delete job k8s-infer-alexnet-googlenet-pv-job -n ${NAMESPACE} 
 job.batch "k8s-infer-alexnet-googlenet-pv-job" deleted
 
@@ -1659,16 +1659,16 @@ $ k logs -f k8s-infer-alexnet-googlenet-pv-job-pxwt8 -n s3 | grep Downloading
 ```
 
 
-## Scheduling (For Task2) 
-### 목표 : 과도한 CLI 사용시 이에 따라 발생하는 리소스 경합등으로 인해 Kubernetes 클러스터에 문제가 발생될 가능성이 있음
-### 이를 방지하기 위해 massive한 workload 처리할 수 있는 k8s-infer의 확장버전을 개발
-### Celery 혹은 airflow DAG와 같은 추가 구성 요소 도입 
+## Scheduling (For Task2)
+### Goal: Excessive CLI use may cause problems in the Kubernetes cluster due to resource contention.
+### To prevent this, we developed an extended version of k8s-infer that can handle massive workloads.
+### Introducing additional components such as Celery or airflow DAG
 
 ```
-# Massive 한 워크로드를 처리하기 위한 2가지 측면에서의 방안
+# Two aspects for handling massive workloads
 
-1. Platform 측면
-  1) 리소스 제한
+1. Platform side
+  1) resource limitations
     Container 생성시 request, limit 속성을 통한 Resource Limitation
 
     # not working
@@ -1690,31 +1690,31 @@ $ k logs -f k8s-infer-alexnet-googlenet-pv-job-pxwt8 -n s3 | grep Downloading
         cpu: "2000m"
 
     Note)
-    Training시 GPU 메모리 = 모델을 로딩하는 필요한 메모리(모델포함시) + 이미지로딩(Data) + Backpropagation + ...
-    CPU 메모리 = 모델로딩 + 이미지 로딩(Data) + ContainerOs + Application + ...
+    GPU memory during training = memory required for loading the model (when including the model) + image loading (Data) + Backpropagation + ...
+    CPU memory = model loading + image loading (Data) + ContainerOs + Application + ...  
 
-  2) HPA 기능 이용
-  - CPU/MEM 메트릭을 통한 Scaleout 수행
-  - 기능 자체보다 Application에서의 처리가 중요(분산처리등)
-	- scaleout 이후 후처리 필요
+  2) Use HPA
+    - Perform scaleout through CPU/MEM metrics
+    - Processing in the application is more important than the function itself (distributed processing, etc.)
+    - Post-processing required after scaleout
 
-  3) lifecycle 관리
-  - 연속된 pipeline 및 Dependency를 Control 할 Ochstrator 혹은 workflow manager 필요
+  3)lifecycle management
+   - Ochstrator or workflow manager is required to control continuous pipeline and dependency.
 
-2. Application & Scheduler 측면(CLI)
-  1) 분산 처리 요건에 따른 로직 구현
-    - 한번 처리된 이미지는 scale된 Pod에서 다시 수행되지 않음
+2. Application & Scheduler side(CLI)
+  1) Logic implementation according to distributed processing requirements
+   - Images that have been processed once are not processed again in the scaled Pod.
 
-  2) Airflow DAG를 사용하여 task 별 동작(Sequential/Dependency)
+  2) Task-specific operation (Sequential/Dependency) using Airflow DAG
 
-# Scheduling 관련 구현사항
-- 추가적인 CLI 개발 및 workflow manager 없이 Jenkins Pipeline 을 통해 다량의 Image를 Inference 할 수 있는 Batch Pipeline 구성
-- S3에 저장된 Image 100장에 대해 model에 따른 Inference 수행 (alexnet-inference-batch-job / resnet-googlenet-inference-batch-job)
-- 수행결과에 대한 로그는 Object Storage 에 저장
+# Scheduling-related implementation details
+  - Batch Pipeline configuration that can infer large amounts of images through Jenkins Pipeline without additional CLI development and workflow manager
+  - Inference is performed according to the model for 100 images stored in S3 (alexnet-inference-batch-job / resnet-googlenet-inference-batch-job)
+  - Logs on performance results are stored in Object Storage
 ```
 
 ```bash
-# batch pipeline 에 사용할 pvc 생성
+# Create pvc to use in batch pipeline
 
 $ NAMESPACE=jenkins
 
@@ -1747,37 +1747,29 @@ spec:
       storage: 1Gi
 EOF
 
-# http://localhost:8181/ 접속후 alexnet-inference-batch-job 및 resnet-googlenet-inference-batch-job Pipeline 확인
-# https://github.com/dbha/technical-interview-cloud-engineer-dbha-private/blob/main/02_Jenkinsfile_AlexNet_Inference_Batch_Job
-# https://github.com/dbha/technical-interview-cloud-engineer-dbha-private/blob/main/03_Jenkinsfile_ResNet50_GoogleNet_Inference_Batch_Job
-# Batch Pipeline enable 수정후 저장 / 작업수행
-# Object Stroage 로그 파일 확인
-# http://localhost:8080 airflow 를 활용한 alexnet batch 확인
 ```
 
 ## Documentation (For Task3)
 ### TO-BE
-### 아키텍처 측면
+### Architecture part
 <img src="images/architecture-overview-tobe.png" >  
 
 ### lessons learned
 ```
-1. torchvision 사용시 python 버전에 대한 고려 필요
-  : 현재 시점으로 python 최신버전 지원 안됨 (python3.10, 3.11등)
+1. When using torchvision, we need to consider the python version.
+   : In my case, the latest version of python is not supported (python3.10, 3.11, etc.)
 
-2. 개발시 python 환경 구성에 대한 어려움
-  : SDK 및 Driver 개발시 버전별 Dependency로 인해 최초 구성환경이 어려우며, 이로 인해 Client 사용환경까지 복잡할 수 있음
-  : 플랫폼 측면에서 개발환경(Cloud Native Environment)을 쉽게 제공해 줄 수 있는 방안 필요
+2. Difficulties in configuring the python environment during development
+   : When developing SDK and drivers, the initial configuration environment is difficult due to dependency for each version, and the client use environment can be complicated as a result.
+   : There is a need for a way to easily provide a development environment (Cloud Native Environment) from the platform perspective.
 
-3. CLI 개발 측면
-  : 모델별 weights 를 선택할 수 있도록
-  : 지금의 Packaging 방식은 pip install 후 만들어지는 실행파일과 해당 모듈에 필요한 source(cli.py)가 필요 (download CLI 측면)
-  : Code 효율화(중복 코드를 공통함수로 만들어서 사용)
+3. CLI development aspect
+   : To select weights for each model
+   : The current packaging method requires the executable file created after pip install and the source (cli.py) required for the module (download CLI aspect)
+   : Code efficiency (use duplicate code by making it a common function)
 
-4. workflow engine을 통한 Job Schedule 관리
+4. Job schedule management through workflow engine
 
-5. 장기적인 관점에서의 CLI 개발 방향
-  : out-of-tree 방식의 개발방식 필요(Core + Plugin 방식)
+5. CLI development direction from a long-term perspective
+   : Requires out-of-tree development method (Core + Plugin method)
 ```
-
-## Q&A
