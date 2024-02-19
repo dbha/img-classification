@@ -911,7 +911,7 @@ kind: ServiceAccount
 metadata:
 ...
 
-# 배포할 yaml 파일 확인
+# Check the yaml file to deploy
 $ cat ~/Workspaces/git/img-classification/k8s/k8s-infer-alexnet-job.yaml
 apiVersion: batch/v1
 kind: Job
