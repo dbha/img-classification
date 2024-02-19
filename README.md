@@ -1,5 +1,5 @@
 # Overview
-This Repo is about Inference Testing ImageNet Image using CLI(k8s-infer) developed in Python. k8s-infer CLI includes the following functions.   
+This Repo is Inference Testing ImageNet Image using CLI(k8s-infer) self developed through Python. k8s-infer CLI includes the following functions.   
      - Inference through Pretrained Torchvision Model   
      - Error handling for parameter input values when performing CLI    
      - Perform Inference using Kubernetes Resource (Pod or Job) 
