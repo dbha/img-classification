@@ -1678,7 +1678,7 @@ $ k logs -f k8s-infer-alexnet-googlenet-pv-job-pxwt8 -n s3 | grep Downloading
 
 1. Platform side
   1) resource limitations
-    Container 생성시 request, limit 속성을 통한 Resource Limitation
+    Resource Limitation through request and limit properties when creating a container
 
     # not working
     resources:
